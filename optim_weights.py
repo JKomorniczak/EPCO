@@ -1,34 +1,36 @@
 import numpy as np
 from sklearn.datasets import make_classification
-from problexity.classification import f1, f1v, f2, f3, f4, l1, l2, l3, n1, n2, n3, n4, t1, lsc, density, clsCoef, hubs, t2, t3, t4, c1, c2
+from problexity.classification import f1, f1v, f2, f3, f4, l1, l2, l3, n1, n2, n3, n4, t1, lsc, \
+    density, clsCoef, hubs, t2, t3, t4, c1, c2
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_breast_cancer
 
 ### genetic params
 pop_size = 150
-iters = 50
-cross_ratio = 0.8
+iters = 150
+cross_ratio = 0.5
 mut_ratio = 0.3
-mut_std = 0.1
+mut_std = 0.3
+cross_factor = 1.0
 
-decay_cross = 0.1
-decay_mut = 0.1
+decay_cross = 0.03
+decay_mut = 0.03
 
 ### target
 target_X, target_y = load_breast_cancer(return_X_y=True)
 
-complexity_fun = [f1v, n3, t4, l2]
+complexity_fun = [n3, f1, t2]
 target_complexity = [f(target_X, target_y) for f in complexity_fun]
 complexity_fun_names = [c.__name__ for c in complexity_fun]
 
 ### init
-n_features = 10
+n_features = 2
 n_features_target = 2
 X, y = make_classification(n_samples=500,
                            n_features=n_features, 
-                           n_informative=n_features//2, 
-                           n_redundant=n_features//2, n_repeated=0, 
-                           n_clusters_per_class=1)
+                           n_informative=n_features, 
+                           n_redundant=0, n_repeated=0, 
+                           n_clusters_per_class=2)
 
 population = np.random.normal(loc=0, scale=1, size=(pop_size, n_features, n_features_target))
 
@@ -45,9 +47,15 @@ for i in range(iters):
         for cf_id, cf in enumerate(complexity_fun):
             pop_scores[projection_id, cf_id] = np.abs(target_complexity[cf_id] - cf(pX, y))
     
+    #diversity score:
+    std_scores = np.std(pop_scores, axis=0)
+    weights = np.copy(std_scores)
+    weights /= np.sum(weights)
+    print(weights)
+    
     #TODO
-    fitness = np.sum(pop_scores, axis=1)
-    print(fitness)
+    fitness = np.sum(weights*pop_scores, axis=1)
+    # print(fitness)
     
     pop_scores_all.append(np.copy(pop_scores))
     fitness_all.append(np.copy(fitness))
@@ -56,13 +64,17 @@ for i in range(iters):
                 
         ### krzyżowanie
         n_crosses = np.max([int(cross_ratio*pop_size), 1])
+        n_dims = np.max([int(cross_factor*n_features_target), 1])
+        
         arg_sorted = np.argsort(fitness)
         arg_to_cross = arg_sorted[:n_crosses]
         arg_to_replace = np.random.choice(arg_sorted[n_crosses:], n_crosses)
         arg_pairs_cross = np.array([np.random.permutation(arg_to_cross), arg_to_cross]).swapaxes(0,1)
-
+        
         for n_cross_id, (arg1, arg2) in enumerate(arg_pairs_cross):
-            crossed = (population[arg1] + population[arg2])/2
+            dim_to_cross = np.random.choice(n_features_target, n_dims)
+            crossed = np.copy(population[arg_to_replace[n_cross_id]])
+            crossed[dim_to_cross] = (population[arg1, dim_to_cross] + population[arg2, dim_to_cross])/2
             #zastępujemy
             population[arg_to_replace[n_cross_id]] = crossed
             
@@ -114,9 +126,14 @@ for i in range(best_over_time.shape[1]):
                     mean_over_time[:,i]-div_over_time[:,i],
                     mean_over_time[:,i]+div_over_time[:,i],
                     color=cols[i], lw=0, alpha=0.1)
-    
+
+diverse = np.argsort(-np.std(pop_scores_all, axis=(0,1)))[:3]
+print(diverse)
+img = np.array(pop_scores_all)[:,:,diverse].swapaxes(0,1)
+img -= np.min(img)
+img /= np.max(img) + 0.0001
 ax[2].imshow(np.array(fitness_all).T, cmap='coolwarm', aspect='auto')
-ax[3].imshow(np.array(pop_scores_all)[:,:,:3].swapaxes(0,1), aspect='auto')
+ax[3].imshow(img, aspect='auto')
 
 ax[1].legend()
 
