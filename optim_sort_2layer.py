@@ -15,8 +15,8 @@ def generate(X, projection1, projection2):
 
 ### genetic params
 pop_size = 100
-iters = 50
-cross_ratio = 0.2
+iters = 150
+cross_ratio = 0.4
 mut_ratio = 0.2
 mut_std = 0.1
 
@@ -26,12 +26,13 @@ decay_mut = 0.01
 hls = 2
 
 ### target
-target_X, target_y = load_breast_cancer(return_X_y=True)
-target_X -= np.mean(target_X)
-target_X /= np.std(target_X) 
+# target_X, target_y = load_breast_cancer(return_X_y=True)
+# target_X -= np.mean(target_X)
+# target_X /= np.std(target_X) 
 
-complexity_fun = [f1, n3, t1, n1]
-target_complexity = [f(target_X, target_y) for f in complexity_fun]
+complexity_fun = [f1, n3, t1, n2]
+# target_complexity = [f(target_X, target_y) for f in complexity_fun]
+target_complexity = [0.7, 0.7, 0.7, 0.7]
 complexity_fun_names = [c.__name__ for c in complexity_fun]
 
 ### init
