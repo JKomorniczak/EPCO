@@ -7,25 +7,24 @@ from sklearn.datasets import load_breast_cancer
 from tqdm import tqdm
 
 class GenMirror:
-    def __init__(self, X, y, measures):
-        self.targetX = X
-        self.targety = y
+    def __init__(self, X_source, y_source, X_target, y_target, measures):
+        self.X_source = X_source
+        self.y_source = y_source
+        self.X_target = X_target
+        self.y_target = y_target
+
         self.measures = measures
         
-        self.target_complexity = [f(self.targetX, self.targety) for f in self.measures]
+        self.target_complexity = [f(self.X_target, self.y_target) for f in self.measures]
 
         
-    def generate(self, n_target_features, n_samples = 200, n_classes = 2, pop_size = 100, iters=100, cross_ratio=0.3, mut_ratio=0.1, mut_std = 0.1, decay = 0.01):
-        self.n_target_features = n_target_features
+    def generate(self, pop_size = 100, iters=100, cross_ratio=0.3, mut_ratio=0.1, mut_std = 0.1, decay = 0.01):
         self.iters = iters
         self.order_all = []
         self.scores_all = []
         self.measures_all = []
-        
-        # self.X, self.y = make_blobs(n_samples=n_samples, n_features=n_target_features, centers=n_classes)
-        self.X, self.y = make_classification(n_samples=n_samples, n_features=n_target_features, n_classes=n_classes)
-        
-        self.population = np.random.normal(loc=0, scale=3, size=(pop_size, n_target_features, n_target_features))
+                
+        self.population = np.random.normal(loc=0, scale=3, size=(pop_size, self.X_source.shape[1], self.X_source.shape[1]))
         self.pop_scores = np.full((pop_size, len(self.measures)), np.nan)
         
         ### optimize
@@ -34,53 +33,27 @@ class GenMirror:
             # score
             if i==0:
                 for projection_id, projection in enumerate(self.population):
-                    pX = self.project(self.X, projection)
+                    pX = self.project(projection)
                     
                     for cf_id, cf in enumerate(self.measures):
-                        self.pop_scores[projection_id, cf_id] = np.abs(self.target_complexity[cf_id] - cf(pX, self.y))
+                        self.pop_scores[projection_id, cf_id] = np.abs(self.target_complexity[cf_id] - cf(pX, self.y_source))
                                         
-            #reorder
-            # order = np.argsort(np.sum(self.pop_scores, axis=1))
             
-            #individual criteria
-            # ranks = np.zeros((pop_size))
-            # for m in range(len(self.measures)):
-            #     ranks+=np.argsort(self.pop_scores[:,m])*weights[m]
+            order = np.zeros((pop_size)).astype(int)
+            indexes = np.arange(0, pop_size-len(self.measures)+1, len(self.measures)+1) # additional for mean criteria
             
-            order = np.full((pop_size), np.nan).astype(int)
-            indexes = np.arange(0, pop_size, len(self.measures))
-            print(indexes)
-
+            
             for m in range(len(self.measures)):
                 r = np.argsort(self.pop_scores[:,m])
                 order[indexes+m] = r[:len(indexes)]
-                print(order)
-                
-            # exit()
-
-
-            # # print(ranks)
-            # print(order)
-            # print(ranks)
-            # order2 = np.zeros_like(ranks).astype(int)
-            # filled = 0
-            # uniq, uc = np.unique(ranks, return_counts=True)
-            # for uc_id in range(len(uniq)):
-            #     # print(np.arange(uc[uc_id]) + filled)
-            #     # order2[ranks==uniq[uc_id]] = np.arange(uc[uc_id])[np.random.permutation(uc[uc_id])] + filled
-            #     order2[ranks==uniq[uc_id]] = np.arange(uc[uc_id]) + filled
-            #     filled += uc[uc_id]
-                
-                # print(order2)
-                
-            # exit()
-            # print(order2)
-
-
-            # order = order2
-            # if i==3:
-            #     exit()
             
+            r = np.argsort(np.sum(self.pop_scores, axis=1))
+            indexes2 = indexes+len(self.measures)
+            indexes2 = indexes2[indexes2<pop_size]
+            order[indexes2] = r[:len(indexes2)]            
+            
+            print(np.unique(order, return_counts=True))
+            # exit()
             self.population = self.population[order]
             self.pop_scores = self.pop_scores[order]
             
@@ -105,9 +78,9 @@ class GenMirror:
                     # score new
                     score_new = [[] for i in range(len(self.target_complexity))]
                     for projection_id, projection in enumerate(new):
-                        pX = self.project(self.X, projection)               
+                        pX = self.project(projection)               
                         for cf_id, cf in enumerate(self.measures):
-                            score_new[cf_id].append(np.abs(self.target_complexity[cf_id] - cf(pX, self.y)))
+                            score_new[cf_id].append(np.abs(self.target_complexity[cf_id] - cf(pX, self.y_source)))
                     
                     
                 self.population[-n_crosses:] = new
@@ -122,21 +95,19 @@ class GenMirror:
                     self.population[arg] += np.random.normal(loc=0, scale=mut_std)
                     
                     # score mutated
-                    pX = self.project(self.X, self.population[arg])
+                    pX = self.project(self.population[arg])
                 
                     for cf_id, cf in enumerate(self.measures):
-                        self.pop_scores[arg, cf_id] = (np.abs(self.target_complexity[cf_id] - cf(pX, self.y)))
+                        self.pop_scores[arg, cf_id] = (np.abs(self.target_complexity[cf_id] - cf(pX, self.y_source)))
                     
                 mut_ratio = mut_ratio*(1-decay)
 
-    def return_best(self):
-        X = self.project(self.X, self.population[0])
-        return X, self.y
+    def return_best(self, index=0):
+        return self.project(self.population[index]), self.y_source
 
-    def project(self, X, projection):
-        pX = X@projection
-        # pX -= np.mean(pX)
-        # pX /= np.std(pX)
+    def project(self, projection):
+        pX = self.X_source@projection
+        pX = pX/self.X_source.shape[1]
         return pX
     
     def gen_image(self):
@@ -165,7 +136,9 @@ class GenMirror:
                             color=cols[i], lw=0, alpha=0.1)
 
         ax[2].imshow(np.array(self.scores_all).T, cmap='coolwarm', aspect='auto')
+        ax[2].set_ylabel('mean fitness')
         ax[3].imshow(np.array(self.order_all).T, aspect='auto', cmap='coolwarm', interpolation='none')
+        ax[3].set_ylabel('order')
 
         ax[1].legend()
 
@@ -193,20 +166,22 @@ class GenMirror:
         ax.grid(ls=':')
 
         plt.tight_layout()
-        plt.savefig('foo.png')
+        plt.savefig('foo2.png')
 
 
 
 ### target
-target_X, target_y = make_classification(n_samples=200)
+X_target, y_target = load_breast_cancer(return_X_y=True)
+# X_source, y_source = make_classification(n_samples=200, n_features=2, n_informative=2, n_repeated=0, n_redundant=0)
+X_source, y_source = make_classification(n_samples=200)
 complexity_fun = [f1, n3]
 
 # optimize
-mirror = GenMirror(target_X, target_y, complexity_fun)
-mirror.generate(n_target_features=10, iters=600, pop_size=50, 
-                cross_ratio=0.25, mut_ratio=0.1)
+mirror = GenMirror(X_source, y_source, X_target, y_target, complexity_fun)
+mirror.generate(iters=100, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
 
 X, y = mirror.return_best()
 
+mirror.gen_image()
 mirror.gen_pareto()
 
