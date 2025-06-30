@@ -6,16 +6,12 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import load_breast_cancer
 from tqdm import tqdm
 
-class GenMirror:
-    def __init__(self, X_source, y_source, X_target, y_target, measures):
+class GenComplexity:
+    def __init__(self, X_source, y_source, target_complexity, measures):
         self.X_source = X_source
         self.y_source = y_source
-        self.X_target = X_target
-        self.y_target = y_target
-
         self.measures = measures
-        
-        self.target_complexity = [f(self.X_target, self.y_target) for f in self.measures]
+        self.target_complexity = target_complexity
 
         
     def generate(self, pop_size = 100, iters=100, cross_ratio=0.3, mut_ratio=0.1, mut_std = 0.1, decay = 0.01):
@@ -159,6 +155,7 @@ class GenMirror:
         cols = plt.cm.coolwarm(np.linspace(0,1,self.iters))
         for iter in range(self.iters):
             ax.scatter(aa[iter,:,0], aa[iter,:,1], color=cols[iter], alpha=0.2)
+        ax.scatter(aa[-1,len(self.measures),0],aa[-1,len(self.measures),1],c='r',marker='x')
         ax.scatter(0,0,c='k',marker='x')
 
         ax.spines['top'].set_visible(False)
@@ -171,16 +168,19 @@ class GenMirror:
 
 
 ### target
-X_target, y_target = load_breast_cancer(return_X_y=True)
-# X_source, y_source = make_classification(n_samples=200, n_features=2, n_informative=2, n_repeated=0, n_redundant=0)
-X_source, y_source = make_classification(n_samples=200)
 complexity_fun = [f1, n3]
 
-# optimize
-mirror = GenMirror(X_source, y_source, X_target, y_target, complexity_fun)
-mirror.generate(iters=100, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
+X_target, y_target = load_breast_cancer(return_X_y=True)
+# targets = [f(X_target, y_target) for f in complexity_fun]
+targets = [0.3, 0.6]
 
-X, y = mirror.return_best()
+X_source, y_source = make_classification(n_samples=200)
+
+# optimize
+mirror = GenComplexity(X_source, y_source, targets, complexity_fun)
+mirror.generate(iters=500, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
+
+X, y = mirror.return_best(2)
 
 mirror.gen_image()
 mirror.gen_pareto()
