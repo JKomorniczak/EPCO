@@ -72,12 +72,11 @@ class GenComplexity:
                     new.append(crossed)
                     
                     # score new
-                    score_new = [[] for i in range(len(self.target_complexity))]
+                    score_new = [[] for i in range(len(self.measures))]
                     for projection_id, projection in enumerate(new):
                         pX = self.project(projection)               
                         for cf_id, cf in enumerate(self.measures):
                             score_new[cf_id].append(np.abs(self.target_complexity[cf_id] - cf(pX, self.y_source)))
-                    
                     
                 self.population[-n_crosses:] = new
                 self.pop_scores[-n_crosses:] = np.array(score_new).swapaxes(0,1)
@@ -148,19 +147,39 @@ class GenComplexity:
         
     def gen_pareto(self):
         aa = np.array(self.measures_all)
-        print(aa.shape) #(600, 50, 2)
+        complexity_fun_names = [c.__name__ for c in self.measures]
                 
-        fig, ax = plt.subplots(1,1,figsize=(10,10))
-
+        fig, axx = plt.subplots(len(self.measures),len(self.measures),figsize=(10,10))
         cols = plt.cm.coolwarm(np.linspace(0,1,self.iters))
-        for iter in range(self.iters):
-            ax.scatter(aa[iter,:,0], aa[iter,:,1], color=cols[iter], alpha=0.2)
-        ax.scatter(aa[-1,len(self.measures),0],aa[-1,len(self.measures),1],c='r',marker='x')
-        ax.scatter(0,0,c='k',marker='x')
+        
+        for c1 in range(len(self.measures)):
+            for c2 in range(len(self.measures)):
+                ax = axx[c2,c1]
+                
+                if c1==c2:
+                    ax.plot(aa[:,len(self.measures),c1], c='k', label='mean best')
+                    ax.plot(aa[:,c1,c1], c='r', ls=':', label='individual best')
+                    ax.set_xlabel('iteration')
+                    ax.set_ylabel(complexity_fun_names[c1])
+                    if c1==0:
+                        ax.legend()
+                    
+                elif c1>c2:
+                    for iter in range(self.iters):
+                        ax.scatter(aa[iter,:,c1], aa[iter,:,c2], color=cols[iter], alpha=0.2, s=7)
+                    ax.scatter(aa[-1,len(self.measures),c1],aa[-1,len(self.measures),c2],c='b',marker='x')
+                    ax.scatter(0,0,c='k',marker='x')
+                    ax.set_xlabel(complexity_fun_names[c1])
+                    ax.set_ylabel(complexity_fun_names[c2])
+                
+                else:
+                    ax.set_axis_off()
 
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.grid(ls=':')
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                ax.grid(ls=':')
+                
+
 
         plt.tight_layout()
         plt.savefig('foo2.png')
@@ -168,17 +187,17 @@ class GenComplexity:
 
 
 ### target
-complexity_fun = [f1, n3]
+complexity_fun = [f1, n3, t1]
 
-X_target, y_target = load_breast_cancer(return_X_y=True)
+# X_target, y_target = load_breast_cancer(return_X_y=True)
 # targets = [f(X_target, y_target) for f in complexity_fun]
-targets = [0.3, 0.6]
+targets = [0.3, 0.6, 0.6, 0.6]
 
 X_source, y_source = make_classification(n_samples=200)
 
 # optimize
 mirror = GenComplexity(X_source, y_source, targets, complexity_fun)
-mirror.generate(iters=500, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
+mirror.generate(iters=50, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
 
 X, y = mirror.return_best(2)
 
