@@ -187,7 +187,7 @@ class GenComplexity:
 
 
 ### target
-complexity_fun = [f1, n3, t1]
+complexity_fun = [f1, n3, t1, density]
 
 # X_target, y_target = load_breast_cancer(return_X_y=True)
 # targets = [f(X_target, y_target) for f in complexity_fun]
