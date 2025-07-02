@@ -1,19 +1,15 @@
 import numpy as np
-from sklearn.datasets import make_classification, make_blobs
-from problexity.classification import f1, f1v, f2, f3, f4, l1, l2, l3, n1, n2, n3, n4, t1, lsc, \
-    density, clsCoef, hubs, t2, t3, t4, c1, c2
 import matplotlib.pyplot as plt
-from sklearn.datasets import load_breast_cancer
 from tqdm import tqdm
 
 class GenComplexity:
-    def __init__(self, X_source, y_source, target_complexity, measures):
+    def __init__(self, X_source, y_source, target_complexity, measures, vis=False):
         self.X_source = X_source
         self.y_source = y_source
         self.measures = measures
         self.target_complexity = target_complexity
+        self.vis = vis
 
-        
     def generate(self, pop_size = 100, iters=100, cross_ratio=0.3, mut_ratio=0.1, mut_std = 0.1, decay = 0.01):
         self.iters = iters
         self.order_all = []
@@ -47,17 +43,16 @@ class GenComplexity:
             indexes2 = indexes+len(self.measures)
             indexes2 = indexes2[indexes2<pop_size]
             order[indexes2] = r[:len(indexes2)]            
-            
-            print(np.unique(order, return_counts=True))
-            # exit()
+
             self.population = self.population[order]
             self.pop_scores = self.pop_scores[order]
             
             ## for vis
-            self.order_all.append(order)
-            self.scores_all.append(np.sum(self.pop_scores, axis=1))
-            self.measures_all.append(self.pop_scores)
-            
+            if self.vis:
+                self.order_all.append(order)
+                self.scores_all.append(np.sum(self.pop_scores, axis=1))
+                self.measures_all.append(self.pop_scores)
+                
             if i!= self.iters-1: # w ostatnim kroku bez modyfikacji
                         
                 ### krzyżowanie
@@ -106,15 +101,15 @@ class GenComplexity:
         return pX
     
     def gen_image(self):
+        if self.vis==False:
+            return 
         bestX, y = self.return_best()
-        complexity = [cf(X, y) for cf in self.measures]
+        complexity = [cf(bestX, y) for cf in self.measures]
         complexity_fun_names = [c.__name__ for c in self.measures]
         best_over_time = np.min(np.array(self.measures_all), axis=1)
         mean_over_time = np.mean(np.array(self.measures_all), axis=1)
         div_over_time = np.std(np.array(self.measures_all), axis=1)
-        
-        print(best_over_time.shape)
-        
+                
         fig, ax = plt.subplots(4,1,figsize=(10,10))
 
         ax[0].scatter(bestX[:,0], bestX[:,1], c=y, cmap='coolwarm')
@@ -146,6 +141,8 @@ class GenComplexity:
         plt.savefig('foo.png')
         
     def gen_pareto(self):
+        if self.vis==False:
+            return 
         aa = np.array(self.measures_all)
         complexity_fun_names = [c.__name__ for c in self.measures]
                 
@@ -178,29 +175,6 @@ class GenComplexity:
                 ax.spines['top'].set_visible(False)
                 ax.spines['right'].set_visible(False)
                 ax.grid(ls=':')
-                
-
 
         plt.tight_layout()
         plt.savefig('foo2.png')
-
-
-
-### target
-complexity_fun = [f1, n3, t1, density]
-
-# X_target, y_target = load_breast_cancer(return_X_y=True)
-# targets = [f(X_target, y_target) for f in complexity_fun]
-targets = [0.3, 0.6, 0.6, 0.6]
-
-X_source, y_source = make_classification(n_samples=200)
-
-# optimize
-mirror = GenComplexity(X_source, y_source, targets, complexity_fun)
-mirror.generate(iters=50, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
-
-X, y = mirror.return_best(2)
-
-mirror.gen_image()
-mirror.gen_pareto()
-
