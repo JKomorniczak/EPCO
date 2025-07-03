@@ -7,7 +7,7 @@ from Generate import GenComplexity
 from sklearn.naive_bayes import GaussianNB
 
 ### target
-complexity_fun = [f1, n3, t1, density]
+complexity_fun = [f1]
 targets = [0.3, 0.6, 0.6, 0.6]
 
 X_source, y_source = make_classification(n_samples=200)

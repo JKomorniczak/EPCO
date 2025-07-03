@@ -9,6 +9,9 @@ class GenComplexity:
         self.measures = measures
         self.target_complexity = target_complexity
         self.vis = vis
+        
+        if len(target_complexity) != len(measures):
+            raise AttributeError('Wrong length of target complexity in relation to measures')
 
     def generate(self, pop_size = 100, iters=100, cross_ratio=0.3, mut_ratio=0.1, mut_std = 0.1, decay = 0.01):
         self.iters = iters
@@ -32,17 +35,21 @@ class GenComplexity:
                                         
             
             order = np.zeros((pop_size)).astype(int)
-            indexes = np.arange(0, pop_size-len(self.measures)+1, len(self.measures)+1) # additional for mean criteria
-            
+            if len(self.measures)==1:
+                n = len(self.measures)
+            else:
+                n = len(self.measures)+1 # additional for mean criteria
+            indexes = np.arange(0, pop_size-n, n) 
             
             for m in range(len(self.measures)):
                 r = np.argsort(self.pop_scores[:,m])
                 order[indexes+m] = r[:len(indexes)]
             
-            r = np.argsort(np.sum(self.pop_scores, axis=1))
-            indexes2 = indexes+len(self.measures)
-            indexes2 = indexes2[indexes2<pop_size]
-            order[indexes2] = r[:len(indexes2)]            
+            if len(self.measures)>1:
+                r = np.argsort(np.sum(self.pop_scores, axis=1))
+                indexes2 = indexes+len(self.measures)
+                indexes2 = indexes2[indexes2<pop_size]
+                order[indexes2] = r[:len(indexes2)]            
 
             self.population = self.population[order]
             self.pop_scores = self.pop_scores[order]
@@ -153,7 +160,10 @@ class GenComplexity:
         
         for c1 in range(len(self.measures)):
             for c2 in range(len(self.measures)):
-                ax = axx[c2,c1]
+                try:
+                    ax = axx[c2,c1]
+                except:
+                    ax = axx
                 
                 if c1==c2:
                     ax.plot(aa[:,len(self.measures),c1], c='k', label='mean best')
