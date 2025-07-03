@@ -3,9 +3,10 @@ from problexity.classification import f1, f1v, f2, f3, f4, l1, l2, l3, n1, n2, n
     density, clsCoef, hubs, t2, t3, t4, c1, c2
 import matplotlib.pyplot as plt
 
-results = np.load('res/e_individual.npy')
+results = np.load('res/e_mir_individual.npy')
 print(results.shape) # 10 x 20 x 11 x 5
 
+exit()
 # clf, 
 # clf diff from source, 
 # score, 
@@ -18,11 +19,7 @@ complexity_funs = [f1, f1v, f2, f3, f4, l1, l2, l3, n1, n2, n3, n4, t1, lsc, den
 complexity_funs = [c.__name__ for c in complexity_funs]
 targets = np.linspace(0, 1, 11)
 
-# mean_res = np.mean(results, axis=0) # 20 x 11 x 5
-mean_res = results[0]
-
-print(np.min(mean_res[:,:,1]))
-print(np.max(mean_res[:,:,1]))
+mean_res = np.mean(results, axis=0) # 20 x 11 x 5
 
 fig, ax = plt.subplots(1,5,figsize=(12,5), sharex=True, sharey=True)
 
@@ -34,12 +31,4 @@ for i in range(5):
 ax[0].set_yticks(np.arange(len(complexity_funs)), complexity_funs)
     
 plt.tight_layout()
-plt.savefig('foo3.png')
-
-# Note:
-# Na podstawie tego eksperymentu można wybrać te miary 
-# które faktycznie są łatwo modyfikowalne 
-# i na nich skupić się w eksperymencie multiobjective. 
-# Tam można zobaczyć, czy skoro pojedyncze są łatwo modyfikowalne 
-# to tak samo bedzie jak się je weźmie pod uwagę razem.
-
+plt.savefig('foo4.png')
