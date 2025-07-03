@@ -92,7 +92,9 @@ class GenComplexity:
                     
                 mut_ratio = mut_ratio*(1-decay)
 
-    def return_best(self, index=0):
+    def return_best(self, index=None):
+        if index==None:
+            index = len(self.measures)
         return self.project(self.population[index]), self.y_source
 
     def project(self, projection):
