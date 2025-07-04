@@ -42,7 +42,7 @@ fig, ax = plt.subplots(1,5,figsize=(12,5), sharex=True, sharey=True)
 for i in range(5):
     ax[i].set_title(res_labels[i])
     ax[i].imshow(mean_res[:,:,i], cmap='coolwarm', aspect='auto')
-    ax[i].set_xticks(np.arange(len(targets))[::2], np.round(targets,1)[::2])
+    ax[i].set_xticks(np.arange(len(targets)), np.round(targets,1))
 
 ax[0].set_yticks(np.arange(len(complexity_funs)), complexity_funs)
     

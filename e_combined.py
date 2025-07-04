@@ -30,7 +30,7 @@ ranges = [
     [0.9, 1.0], #hubs
     [0.4, 0.6]  #t4
 ]
-n_targets = 3
+n_targets = 5
 
 targets = []
 for fun_id in range(len(complexity_funs)):
