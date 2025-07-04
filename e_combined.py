@@ -8,9 +8,7 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 import numpy as np
 from sklearn.datasets import make_classification
 from problexity.classification import f1, f3, f4, l2, n1, n3, n4, t1, clsCoef, hubs, t4
-from sklearn.model_selection import cross_val_score
 from Generate import GenComplexity
-from sklearn.naive_bayes import GaussianNB
 np.random.seed(188)
 
 reps = 10
@@ -38,7 +36,13 @@ for fun_id in range(len(complexity_funs)):
     targets.append(t)   
 
 targets = np.array(targets).swapaxes(0,1)
-n_datasets = 5
+n_datasets = 12
+
+n_samples=500
+n_features=20
+
+combined_datasets = np.zeros((reps, n_targets, n_datasets, n_samples, n_samples, n_features+1))
+combined_results = np.zeros((reps, n_targets, n_datasets, 2, len(complexity_funs)))
 
 for rep_id, rs in enumerate(random_states):
     X_source, y_source = make_classification(n_samples=500, random_state=rs)
@@ -46,10 +50,28 @@ for rep_id, rs in enumerate(random_states):
     for target_id in range(n_targets):
         gen = GenComplexity(X_source, y_source, targets[target_id], complexity_funs)
         
-        gen.generate(iters=50, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
+        gen.generate(iters=300, pop_size=100, 
+                     cross_ratio=0.25, mut_ratio=0.1, 
+                     decay=0.007)
         
         for n in range(n_datasets):
-            X, y = gen.return_best()
+            X, y = gen.return_best(n)
+            
+            combined_datasets[rep_id, target_id, n, :, :n_features] = X
+            combined_datasets[rep_id, target_id, n, :, -1] = y
+            
+            combined_results[rep_id, target_id, n, 0] = gen.pop_scores[n]
+            combined_results[rep_id, target_id, n, 1] = [fun(X,y) for fun in gen.measures]
+            
+        np.save('res/combined_datasets.npy', combined_datasets)
+        np.save('res/combined_results.npy', combined_results)
+        
+        
+            
+            
+            
+            
+            
         
         
         
