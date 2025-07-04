@@ -50,7 +50,7 @@ for rep_id, rs in enumerate(random_states):
     for target_id in range(n_targets):
         gen = GenComplexity(X_source, y_source, targets[target_id], complexity_funs)
         
-        gen.generate(iters=300, pop_size=100, 
+        gen.generate(iters=200, pop_size=200, 
                      cross_ratio=0.25, mut_ratio=0.1, 
                      decay=0.007)
         
@@ -63,15 +63,6 @@ for rep_id, rs in enumerate(random_states):
             combined_results[rep_id, target_id, n, 0] = gen.pop_scores[n]
             combined_results[rep_id, target_id, n, 1] = [fun(X,y) for fun in gen.measures]
             
-        np.save('res/combined_datasets.npy', combined_datasets)
-        np.save('res/combined_results.npy', combined_results)
-        
-        
-            
-            
-            
-            
-            
-        
-        
+        np.save('res/combined_datasets2.npy', combined_datasets)
+        np.save('res/combined_results2.npy', combined_results)
         
