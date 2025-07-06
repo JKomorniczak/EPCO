@@ -32,7 +32,7 @@ print(combined_results.shape)
 # (10, 5, 12, 2, 11)
 
 # combined_results_mean = np.mean(combined_results, axis=0)
-combined_results_mean = combined_results[8]
+combined_results_mean = combined_results[9]
 # targets, datasets, (scores, complexities), measures
 
 fig, ax = plt.subplots(2, n_targets, figsize=(15,7), sharex=True, sharey=True)
