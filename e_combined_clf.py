@@ -31,7 +31,7 @@ print(combined_datasets.shape)
 
 res_clf = np.zeros((10, 12, 5, 10, len(clfs)))
 
-for rep in range(10):
+for rep in range(5): #### 10
     for dataset_id in range(12):
         
         for target_com_id in range(5):
