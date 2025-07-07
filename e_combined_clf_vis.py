@@ -16,7 +16,11 @@ fig, ax = plt.subplots(5, 1, figsize=(10,10))
 
 for clf_id, clf in enumerate(clfs):
     ax[clf_id].set_title(clf)
-    ax[clf_id].violinplot(res_clf[:,:,clf_id])
+    ax[clf_id].boxplot(res_clf[:,:,clf_id])
+    
+for aa in ax:
+    aa.spines['top'].set_visible(False)
+    aa.spines['right'].set_visible(False)
     
 plt.tight_layout()
 plt.savefig('foo.png')
