@@ -36,3 +36,4 @@ ax[-1].set_xticks(np.arange(5)+1, ['easy', 'mid/easy', 'medium', 'mid/complex', 
     
 plt.tight_layout()
 plt.savefig('foo.png')
+plt.savefig('figures/clf-scores.png')

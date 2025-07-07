@@ -39,9 +39,13 @@ for p_id, pc in enumerate(violin_parts['bodies']):
 violin_parts['cbars'].set_colors(np.array(['b','r'])[mask])
 violin_parts['cmins'].set_colors(np.array(['b','r'])[mask])
 violin_parts['cmaxes'].set_colors(np.array(['b','r'])[mask])
-    
+
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
 plt.tight_layout()
 plt.savefig('foo.png')
+plt.savefig('figures/single_criteria.png')
 
 ranges = [
     [0.3, 0.9], #f1
