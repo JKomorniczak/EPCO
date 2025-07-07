@@ -12,7 +12,7 @@ res_clf = np.mean(res_clf, axis=2)
 
 print(res_clf.shape) # (reps*datasets, targets, clfs)
 
-fig, ax = plt.subplots(5, 1, figsize=(10,10))
+fig, ax = plt.subplots(5, 1, figsize=(10,10), sharex=True, sharey=True)
 
 for clf_id, clf in enumerate(clfs):
     ax[clf_id].set_title(clf)
@@ -21,6 +21,7 @@ for clf_id, clf in enumerate(clfs):
 for aa in ax:
     aa.spines['top'].set_visible(False)
     aa.spines['right'].set_visible(False)
+    aa.grid(ls=':')
     
 plt.tight_layout()
 plt.savefig('foo.png')
