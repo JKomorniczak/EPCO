@@ -14,14 +14,27 @@ print(res_clf.shape) # (reps*datasets, targets, clfs)
 
 fig, ax = plt.subplots(5, 1, figsize=(10,10), sharex=True, sharey=True)
 
+
 for clf_id, clf in enumerate(clfs):
-    ax[clf_id].set_title(clf)
-    ax[clf_id].boxplot(res_clf[:,:,clf_id])
+    
+    rc = res_clf[:,:,clf_id]
+    mrc = np.mean(rc, axis=0)
+    mrc -= 0.5
+    mrc /=0.5
+    colors = plt.cm.coolwarm(mrc)
+
+    ax[clf_id].set_ylabel('%s \naccuracy' % (clf))
+    bplot = ax[clf_id].boxplot(rc, patch_artist=True)
+    
+    for patch, color in zip(bplot['boxes'], colors):
+        patch.set_facecolor(color)
     
 for aa in ax:
     aa.spines['top'].set_visible(False)
     aa.spines['right'].set_visible(False)
     aa.grid(ls=':')
+    
+ax[-1].set_xticks(np.arange(5)+1, ['easy', 'mid/easy', 'medium', 'mid/complex', 'complex'])
     
 plt.tight_layout()
 plt.savefig('foo.png')
