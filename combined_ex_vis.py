@@ -7,38 +7,38 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 
 import numpy as np
 from sklearn.datasets import make_classification
-from problexity.classification import f1, f3, l2, n1, n3, n4, t1, clsCoef, hubs, t4
+from problexity.classification import f1, f3, l2, n1, n3, n4, t1, clsCoef, hubs, t4, f4
 from Generate import GenComplexity
 import matplotlib.pyplot as plt
+from scipy.ndimage import gaussian_filter1d
 
 np.random.seed(188)
 
-def gen_pareto(gen, labels):
-    aa = np.array(gen.measures_all)
-            
-    fig, axx = plt.subplots(len(gen.measures),len(gen.measures),figsize=(10,10))
-    cols = plt.cm.coolwarm(np.linspace(0,1,gen.iters))
+def gen_pareto(measures_all, measures, labels):
+    fig, axx = plt.subplots(len(measures),len(measures),figsize=(8,8))
+    cols = plt.cm.coolwarm(np.linspace(0,1,measures_all.shape[0]))
     
-    for c1 in range(len(gen.measures)):
-        for c2 in range(len(gen.measures)):
+    for c1 in range(len(measures)):
+        for c2 in range(len(measures)):
             try:
                 ax = axx[c2,c1]
             except:
                 ax = axx
             
             if c1==c2:
-                ax.plot(aa[:,len(gen.measures),c1], c='k')
-                ax.plot(aa[:,c1,c1], c='b', ls=':')
+                ax.plot(gaussian_filter1d(measures_all[:,len(measures),c1],3), c='k')
+                ax.plot(gaussian_filter1d(measures_all[:,c1,c1],3), c='b', ls=':')
                 if c1==0:
                     ax.set_ylabel(labels[c2])
-                if c1==len(gen.measures)-1:
+                if c1==len(measures)-1:
                     ax.set_xlabel(labels[c1])
             else:
-                for iter in range(gen.iters):
-                    ax.scatter(aa[iter,:,c1], aa[iter,:,c2], color=cols[iter], alpha=0.2, s=7)
-                ax.scatter(aa[-1,:len(gen.measures)+1,c1],aa[-1,:len(gen.measures)+1,c2], c='b', marker='x', s=30)
-                ax.scatter(0,0,c='k',marker='x')
-                if c2==len(gen.measures)-1:
+                for iter in range(measures_all.shape[0]):
+                    ax.scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.15, s=10, lw=0)
+                ax.scatter(measures_all[-1,:len(measures),c1],measures_all[-1,:len(measures),c2], c='b', marker='x', s=30)
+                ax.scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
+                # ax.scatter(0,0,c='k',marker='x')
+                if c2==len(measures)-1:
                     ax.set_xlabel(labels[c1])
                 if c1==0:
                     ax.set_ylabel(labels[c2])
@@ -57,12 +57,36 @@ def gen_pareto(gen, labels):
 reps = 10
 random_states = np.random.randint(100,10000,reps)
 
-complexity_funs = [f1, f3, n3, clsCoef]
+
+# complexity_funs = [f1, f3, f4, l2, n1, n3, n4, t1, clsCoef, hubs, t4]
+# ranges = [
+#     [0.3, 0.9], #f1
+#     [0.6, 1.0], #f3
+#     [0.3, 0.9], #f4
+#     [0.05, 0.3], #l2
+#     [0.05, 0.3], #n1
+#     [0.1, 0.6], #n3
+#     [0.1, 0.4], #n4
+#     [0.6, 1.0], #t1
+#     [0.4, 1.0], #clscoef
+#     [0.9, 1.0], #hubs
+#     [0.4, 0.6]  #t4
+# ]
+
+
+complexity_funs = [f1, f4, n1, t1, clsCoef]
 ranges = [
     [0.3, 0.9], #f1
-    [0.6, 1.0], #f3
-    [0.1, 0.6], #n3
+    # [0.6, 1.0], #f3
+    [0.3, 0.9], #f4
+    # [0.05, 0.3], #l2
+    [0.05, 0.3], #n1
+    # [0.1, 0.6], #n3
+    # [0.1, 0.4], #n4
+    [0.6, 1.0], #t1
     [0.4, 1.0], #clscoef
+    # [0.9, 1.0], #hubs
+    # [0.4, 0.6]  #t4
 ]
 n_targets = 5
 
@@ -80,12 +104,18 @@ n_features=20
 combined_datasets = np.zeros((reps, n_targets, n_datasets, n_samples, n_samples, n_features+1))
 combined_results = np.zeros((reps, n_targets, n_datasets, 2, len(complexity_funs)))
 
-# X_source, y_source = make_classification(n_samples=500, random_state=random_states[0])
+
+# GEN
 X_source, y_source = make_classification(n_samples=200, random_state=random_states[0])
 gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
-gen.generate(iters=200, pop_size=70, cross_ratio=0.25, mut_ratio=0.1, decay=0.007)
+gen.generate(iters=200, pop_size=100, cross_ratio=0.25, mut_ratio=0.1, decay=0.007)
+np.save('res/gen_example_measures.npy', gen.measures_all)
 
-# gen.gen_image()
-labels=['F1', 'F3', 'N3', 'ClsCoef']
-gen_pareto(gen, labels)
+
+# #DRAW
+# measures_all = np.load('res/gen_example_measures.npy')
+
+# # gen.gen_image()
+# labels=['F1', 'F3', 'F4', 'L2', 'N1', 'N3', 'N4', 'T1', 'ClsCoef', 'Hubs', 'T4']
+# gen_pareto(measures_all, complexity_funs, labels)
