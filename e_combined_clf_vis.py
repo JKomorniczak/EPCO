@@ -1,5 +1,4 @@
 import numpy as np
-from problexity.classification import f1, f3, f4, l2, n1, n3, n4, t1, clsCoef, hubs, t4
 import matplotlib.pyplot as plt
 
 clfs = [ 'KNN', 'DT', 'GNB', 'MLP', 'SVM']
@@ -14,7 +13,6 @@ print(res_clf.shape) # (reps*datasets, targets, clfs)
 
 fig, ax = plt.subplots(5, 1, figsize=(10,10), sharex=True, sharey=True)
 
-
 for clf_id, clf in enumerate(clfs):
     
     rc = res_clf[:,:,clf_id]
@@ -23,7 +21,7 @@ for clf_id, clf in enumerate(clfs):
     mrc /=0.5
     colors = plt.cm.coolwarm(mrc)
 
-    ax[clf_id].set_ylabel('%s \naccuracy' % (clf))
+    ax[clf_id].set_ylabel('%s \naccuracy score' % (clf))
     bplot = ax[clf_id].boxplot(rc, patch_artist=True)
     
     for patch, color in zip(bplot['boxes'], colors):
