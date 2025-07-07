@@ -108,3 +108,85 @@ class GenComplexity:
         pX = self.X_source@projection
         pX = pX/self.X_source.shape[1]
         return pX
+    
+    def gen_image(self):
+        if self.vis==False:
+            return 
+        bestX, y = self.return_best()
+        complexity = [cf(bestX, y) for cf in self.measures]
+        complexity_fun_names = [c.__name__ for c in self.measures]
+        best_over_time = np.min(np.array(self.measures_all), axis=1)
+        mean_over_time = np.mean(np.array(self.measures_all), axis=1)
+        div_over_time = np.std(np.array(self.measures_all), axis=1)
+                
+        fig, ax = plt.subplots(4,1,figsize=(10,10))
+
+        ax[0].scatter(bestX[:,0], bestX[:,1], c=y, cmap='coolwarm')
+        ax[0].set_title('measures: %s \n target: %s result: %s \n score: %0.3f' % 
+                        (complexity_fun_names, np.round(self.target_complexity,3), np.round(complexity,3), np.sum(self.pop_scores[0])))
+
+        cols = plt.cm.coolwarm(np.linspace(0,1,len(self.measures)))
+        for i in range(len(self.measures)):
+            ax[1].scatter(np.arange(self.iters), best_over_time[:,i], color=cols[i], s=5)
+            ax[1].plot(np.arange(self.iters), mean_over_time[:,i], c=cols[i], label=complexity_fun_names[i])
+            ax[1].fill_between(np.arange(self.iters), 
+                            mean_over_time[:,i]-div_over_time[:,i],
+                            mean_over_time[:,i]+div_over_time[:,i],
+                            color=cols[i], lw=0, alpha=0.1)
+
+        ax[2].imshow(np.array(self.scores_all).T, cmap='coolwarm', aspect='auto')
+        ax[2].set_ylabel('mean fitness')
+        ax[3].imshow(np.array(self.order_all).T, aspect='auto', cmap='coolwarm', interpolation='none')
+        ax[3].set_ylabel('order')
+
+        ax[1].legend()
+
+        for aa in ax:
+            aa.spines['top'].set_visible(False)
+            aa.spines['right'].set_visible(False)
+            aa.grid(ls=':')
+
+        plt.tight_layout()
+        plt.savefig('foo.png')
+        
+    def gen_pareto(self):
+        if self.vis==False:
+            return 
+        aa = np.array(self.measures_all)
+        complexity_fun_names = [c.__name__ for c in self.measures]
+                
+        fig, axx = plt.subplots(len(self.measures),len(self.measures),figsize=(10,10))
+        cols = plt.cm.coolwarm(np.linspace(0,1,self.iters))
+        
+        for c1 in range(len(self.measures)):
+            for c2 in range(len(self.measures)):
+                try:
+                    ax = axx[c2,c1]
+                except:
+                    ax = axx
+                
+                if c1==c2:
+                    ax.plot(aa[:,len(self.measures),c1], c='k', label='mean best')
+                    ax.plot(aa[:,c1,c1], c='r', ls=':', label='individual best')
+                    ax.set_xlabel('iteration')
+                    ax.set_ylabel(complexity_fun_names[c1])
+                    if c1==0:
+                        ax.legend()
+                    
+                elif c1>c2:
+                    for iter in range(self.iters):
+                        ax.scatter(aa[iter,:,c1], aa[iter,:,c2], color=cols[iter], alpha=0.2, s=7)
+                    ax.scatter(aa[-1,len(self.measures),c1],aa[-1,len(self.measures),c2],c='b',marker='x')
+                    ax.scatter(0,0,c='k',marker='x')
+                    ax.set_xlabel(complexity_fun_names[c1])
+                    ax.set_ylabel(complexity_fun_names[c2])
+                
+                else:
+                    ax.set_axis_off()
+
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                ax.grid(ls=':')
+
+        plt.tight_layout()
+        plt.savefig('foo2.png')
