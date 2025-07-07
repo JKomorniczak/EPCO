@@ -11,6 +11,11 @@ complexity_funs = [f1, f3, f4, l2, n1, n3, n4, t1, clsCoef, hubs, t4]
 n_targets = 5
 n_datasets = 12
 
+complexity_funs = [c.__name__.upper() for c in complexity_funs]
+complexity_funs[8] = 'ClsCoef'
+complexity_funs[9] = 'Hubs'
+
+
 ranges = np.array([
     [0.3, 0.9], #f1
     [0.6, 1.0], #f3
@@ -43,7 +48,7 @@ for t_id in range(n_targets):
     com_pct /= ranges[:,1]
      
     ax[0, t_id].imshow(combined_results_mean[t_id,:,0], cmap='coolwarm', aspect='auto', vmin=0, vmax=0.6)
-    ax[0, t_id].set_title(['easy', 'mid/easy', 'medium', 'mid/complex', 'complex'][t_id])
+    ax[0, t_id].set_title(['easy', 'med-easy', 'medium', 'med-complex', 'complex'][t_id])
 
     im2= ax[1, t_id].imshow(com_pct, cmap='coolwarm', aspect='auto', vmin=0, vmax=0.6)
     
@@ -51,18 +56,19 @@ for t_id in range(n_targets):
         ax[0, t_id].set_ylabel('fitness function \ndataset id')
         ax[1, t_id].set_ylabel('% of max complexity \ndataset id')
     
-    ax[0, t_id].set_xticks(np.arange(11), [c.__name__ for c in complexity_funs], rotation=90)
-    ax[1, t_id].set_xticks(np.arange(11), [c.__name__ for c in complexity_funs], rotation=90)
+    ax[0, t_id].set_xticks(np.arange(11), complexity_funs, rotation=90)
+    ax[1, t_id].set_xticks(np.arange(11), complexity_funs, rotation=90)
 
     ax[0, t_id].set_yticks(np.arange(12))
     ax[1, t_id].set_yticks(np.arange(12))
 
-fig.subplots_adjust(right=0.9)
+# fig.subplots_adjust(right=0.9)
 
-cbar_ax = fig.add_axes([0.92, 0.1, 0.025, 0.78])
+cbar_ax = fig.add_axes([0.92, 0.11, 0.02, 0.837])
 fig.colorbar(im2, cax=cbar_ax)
 
-# plt.tight_layout()
+plt.tight_layout(rect=[0,0,0.9,1])
 plt.savefig('foo.png')
 plt.savefig('figures/combined_results.png')
+plt.savefig('figures/combined_results.pdf')
     
