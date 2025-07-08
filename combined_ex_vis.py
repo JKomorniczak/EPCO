@@ -132,7 +132,7 @@ combined_results = np.zeros((reps, n_targets, n_datasets, 2, len(complexity_funs
 # X_source, y_source = make_classification(n_samples=200, random_state=random_states[0])
 # gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
-# gen.generate(iters=200, pop_size=150, cross_ratio=0.25, mut_ratio=0.1, decay=0.007)
+# gen.generate(iters=200, pop_size=200, cross_ratio=0.35, mut_ratio=0.2, decay=0.007)
 # np.save('res/gen_example_measures.npy', gen.measures_all)
 
 
