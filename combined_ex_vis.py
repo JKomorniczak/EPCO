@@ -18,7 +18,10 @@ np.random.seed(188)
 
 def gen_pareto(measures_all, measures, labels):
     
-    measures_all = measures_all[:70]
+    idx = np.random.choice(measures_all.shape[1], replace=False, size=20)
+    idx = np.sort(idx)
+    idx[:len(measures)+1] = np.arange(len(measures)+1)
+    measures_all = measures_all[:70, idx]
     fig, axx = plt.subplots(len(measures),len(measures),figsize=(10,10))
     cols = plt.cm.coolwarm(np.linspace(0,1,measures_all.shape[0]))
     
@@ -40,7 +43,7 @@ def gen_pareto(measures_all, measures, labels):
                     ax.set_xlabel(labels[c1])
             else:
                 for iter in range(measures_all.shape[0]):
-                    ax.scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.1, s=10, lw=0)
+                    ax.scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.5, s=10, lw=0)
                 ax.scatter(measures_all[-1,:len(measures),c1],measures_all[-1,:len(measures),c2], c='b', marker='x', s=30)
                 ax.scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
                 # ax.scatter(0,0,c='k',marker='x')

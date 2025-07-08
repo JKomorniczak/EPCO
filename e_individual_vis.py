@@ -53,6 +53,7 @@ plt.tight_layout()
 plt.savefig('foo.png')
 plt.savefig('figures/single_criteria.png')
 plt.savefig('figures/single_criteria.pdf')
+plt.savefig('figures/single_criteria.eps')
 
 ranges = [
     [0.3, 0.9], #f1

@@ -71,4 +71,5 @@ plt.tight_layout(rect=[0,0,0.9,1])
 plt.savefig('foo.png')
 plt.savefig('figures/combined_results.png')
 plt.savefig('figures/combined_results.pdf')
+plt.savefig('figures/combined_results.eps')
     
