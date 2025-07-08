@@ -11,11 +11,15 @@ from problexity.classification import f1, f3, l2, n1, n3, n4, t1, clsCoef, hubs,
 from Generate import GenComplexity
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
+from matplotlib.lines import Line2D
+import matplotlib.patches as mpatches
 
 np.random.seed(188)
 
 def gen_pareto(measures_all, measures, labels):
-    fig, axx = plt.subplots(len(measures),len(measures),figsize=(8,8))
+    
+    measures_all = measures_all[:150,:70]
+    fig, axx = plt.subplots(len(measures),len(measures),figsize=(10,10))
     cols = plt.cm.coolwarm(np.linspace(0,1,measures_all.shape[0]))
     
     for c1 in range(len(measures)):
@@ -26,8 +30,10 @@ def gen_pareto(measures_all, measures, labels):
                 ax = axx
             
             if c1==c2:
-                ax.plot(gaussian_filter1d(measures_all[:,len(measures),c1],3), c='k')
-                ax.plot(gaussian_filter1d(measures_all[:,c1,c1],3), c='b', ls=':')
+                for aa in range(len(measures)):
+                    ax.plot(gaussian_filter1d(measures_all[:,aa,c1],3), c='b', lw=0.25, label=labels[aa])
+                ax.plot(gaussian_filter1d(measures_all[:,len(measures),c1],3), c='k', label='$\Sigma$')
+                ax.plot(gaussian_filter1d(measures_all[:,c1,c1],3), c='b', label=labels[c1])
                 if c1==0:
                     ax.set_ylabel(labels[c2])
                 if c1==len(measures)-1:
@@ -49,10 +55,24 @@ def gen_pareto(measures_all, measures, labels):
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
             ax.grid(ls=':')
+            
+    line1 = Line2D([0], [0], label='criterion over evolution', color='b')
+    line2 = Line2D([0], [0], label='mean criteria', color='k')
+    # line3 = Line2D([0], [0], label='leaders', color='b', lw=0.25)
+    point1 = Line2D([0], [0], label='individuals over evolution', markersize=5, 
+                   markeredgecolor=cols[iter], marker='o', markerfacecolor=cols[iter],
+                   linestyle='')
+    point2 = Line2D([0], [0], label='leaders', markersize=5, 
+                   markeredgecolor='b', marker='x', markerfacecolor='b',
+                   linestyle='')
+
+    plt.legend(bbox_to_anchor=(0.9, 0.045), loc="lower right", handles=[line1, line2, point1, point2],
+                bbox_transform=fig.transFigure, ncol=5, frameon=False)
 
     plt.tight_layout()
     plt.savefig('gen_pareto.png')
     plt.savefig('gen_pareto.pdf')
+    plt.savefig('gen_pareto.eps')
 
 reps = 10
 random_states = np.random.randint(100,10000,reps)
@@ -106,16 +126,16 @@ combined_results = np.zeros((reps, n_targets, n_datasets, 2, len(complexity_funs
 
 
 # GEN
-X_source, y_source = make_classification(n_samples=200, random_state=random_states[0])
-gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
+# X_source, y_source = make_classification(n_samples=200, random_state=random_states[0])
+# gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
-gen.generate(iters=200, pop_size=100, cross_ratio=0.25, mut_ratio=0.1, decay=0.007)
-np.save('res/gen_example_measures.npy', gen.measures_all)
+# gen.generate(iters=200, pop_size=100, cross_ratio=0.25, mut_ratio=0.1, decay=0.007)
+# np.save('res/gen_example_measures.npy', gen.measures_all)
 
 
 # #DRAW
-# measures_all = np.load('res/gen_example_measures.npy')
+measures_all = np.load('res/gen_example_measures.npy')
 
-# # gen.gen_image()
-# labels=['F1', 'F3', 'F4', 'L2', 'N1', 'N3', 'N4', 'T1', 'ClsCoef', 'Hubs', 'T4']
-# gen_pareto(measures_all, complexity_funs, labels)
+# gen.gen_image()
+labels=['F1', 'F4', 'N1', 'T1', 'ClsCoef']
+gen_pareto(measures_all, complexity_funs, labels)
