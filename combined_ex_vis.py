@@ -18,7 +18,7 @@ np.random.seed(188)
 
 def gen_pareto(measures_all, measures, labels):
     
-    measures_all = measures_all[:150,:70]
+    measures_all = measures_all[:70]
     fig, axx = plt.subplots(len(measures),len(measures),figsize=(10,10))
     cols = plt.cm.coolwarm(np.linspace(0,1,measures_all.shape[0]))
     
@@ -31,7 +31,7 @@ def gen_pareto(measures_all, measures, labels):
             
             if c1==c2:
                 for aa in range(len(measures)):
-                    ax.plot(gaussian_filter1d(measures_all[:,aa,c1],3), c='b', lw=0.25, label=labels[aa])
+                    ax.plot(gaussian_filter1d(measures_all[:,aa,c1],3), c='b', lw=0.25, label=labels[aa], ls=':')
                 ax.plot(gaussian_filter1d(measures_all[:,len(measures),c1],3), c='k', label='$\Sigma$')
                 ax.plot(gaussian_filter1d(measures_all[:,c1,c1],3), c='b', label=labels[c1])
                 if c1==0:
@@ -40,7 +40,7 @@ def gen_pareto(measures_all, measures, labels):
                     ax.set_xlabel(labels[c1])
             else:
                 for iter in range(measures_all.shape[0]):
-                    ax.scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.15, s=10, lw=0)
+                    ax.scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.1, s=10, lw=0)
                 ax.scatter(measures_all[-1,:len(measures),c1],measures_all[-1,:len(measures),c2], c='b', marker='x', s=30)
                 ax.scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
                 # ax.scatter(0,0,c='k',marker='x')
@@ -66,7 +66,7 @@ def gen_pareto(measures_all, measures, labels):
                    markeredgecolor='b', marker='x', markerfacecolor='b',
                    linestyle='')
 
-    plt.legend(bbox_to_anchor=(0.9, 0.045), loc="lower right", handles=[line1, line2, point1, point2],
+    plt.legend(bbox_to_anchor=(0.89, 0.045), loc="lower right", handles=[line1, line2, point1, point2],
                 bbox_transform=fig.transFigure, ncol=5, frameon=False)
 
     plt.tight_layout()
@@ -129,11 +129,11 @@ combined_results = np.zeros((reps, n_targets, n_datasets, 2, len(complexity_funs
 # X_source, y_source = make_classification(n_samples=200, random_state=random_states[0])
 # gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
-# gen.generate(iters=200, pop_size=100, cross_ratio=0.25, mut_ratio=0.1, decay=0.007)
+# gen.generate(iters=200, pop_size=150, cross_ratio=0.25, mut_ratio=0.1, decay=0.007)
 # np.save('res/gen_example_measures.npy', gen.measures_all)
 
 
-# #DRAW
+# # #DRAW
 measures_all = np.load('res/gen_example_measures.npy')
 
 # gen.gen_image()
