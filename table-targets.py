@@ -1,9 +1,6 @@
 import numpy as np
 from problexity.classification import f1, f3, f4, l2, n1, n3, n4, t1, clsCoef, hubs, t4
-import matplotlib.pyplot as plt
 from tabulate import tabulate
-
-np.random.seed(188)
 
 combined_results = np.load('res/combined_results.npy')
         

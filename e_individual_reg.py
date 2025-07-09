@@ -1,9 +1,9 @@
 import os
 
-default_n_threads = 1
-os.environ['OPENBLAS_NUM_THREADS'] = f"{default_n_threads}"
-os.environ['MKL_NUM_THREADS'] = f"{default_n_threads}"
-os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
+# default_n_threads = 1
+# os.environ['OPENBLAS_NUM_THREADS'] = f"{default_n_threads}"
+# os.environ['MKL_NUM_THREADS'] = f"{default_n_threads}"
+# os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 
 import numpy as np
 from sklearn.datasets import make_regression
@@ -18,7 +18,7 @@ reps = 10
 random_states = np.random.randint(100,10000,reps)
 
 complexity_funs = [c1, c2, c3, c4, l1, l2, s1, s2, s3, l3, s4, t2]
-targets = np.linspace(0, 1, 11)
+targets = np.linspace(0, 1, 6)
 
 results = np.zeros((reps, len(complexity_funs), len(targets), 5)) # clf, 
                                                                   # clf diff from source, 
@@ -26,7 +26,7 @@ results = np.zeros((reps, len(complexity_funs), len(targets), 5)) # clf,
                                                                   # complexity,
                                                                   # complexity diff from source
 for rep_id, rs in enumerate(random_states):
-    X_source, y_source = make_regression(n_samples=500, random_state=rs)
+    X_source, y_source = make_regression(n_samples=100, random_state=rs)
 
     for fun_id, fun in enumerate(complexity_funs):
         print('Measure: %s' % fun.__name__)
@@ -52,6 +52,6 @@ for rep_id, rs in enumerate(random_states):
             results[rep_id, fun_id, target_id, 4] = c - c_source
 
         print(results[rep_id, fun_id])
-        np.save('res/e_individual_reg.npy', results)
+        np.save('res/e_individual_reg_mini.npy', results)
     
     exit()
