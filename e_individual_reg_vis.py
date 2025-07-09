@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 results = np.load('res/e_individual_reg_mini.npy')
 results2 = np.load('res/e_individual_reg_mini2.npy')
 
+results[:,:,3:] = results2[:,:,3:]
+
 print(results.shape) # 10 x 20 x 11 x 5
 
 # clf, 
@@ -56,7 +58,7 @@ ranges = [
     [0.1, 0.6], #c1 5min || 7min
     [0.05, 0.3], #c2 4min || 7min
     [0.3, 0.9], #c3 50min || 47min
-    [0.05, 0.3], #c4 2,5h || 
+    [0.05, 0.3], #c4 2,5h || 52min
     [0.05, 0.3], #l1
     [0.1, 0.6], #l2
     [0.1, 0.4], #s1
