@@ -1,9 +1,9 @@
 import os
 
-# default_n_threads = 1
-# os.environ['OPENBLAS_NUM_THREADS'] = f"{default_n_threads}"
-# os.environ['MKL_NUM_THREADS'] = f"{default_n_threads}"
-# os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
+default_n_threads = 1
+os.environ['OPENBLAS_NUM_THREADS'] = f"{default_n_threads}"
+os.environ['MKL_NUM_THREADS'] = f"{default_n_threads}"
+os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 
 import numpy as np
 from sklearn.datasets import make_regression
@@ -30,6 +30,8 @@ for rep_id, rs in enumerate(random_states):
 
     for fun_id, fun in enumerate(complexity_funs):
         print('Measure: %s' % fun.__name__)
+        if fun_id<3:
+            continue
         c_source = fun(X_source, y_source)
 
         for target_id, target in enumerate(targets):
@@ -39,11 +41,11 @@ for rep_id, rs in enumerate(random_states):
             X, y = gen.return_best(0)
             
             reg = LinearRegression()
-            s1 = cross_val_score(reg, X_source, y_source, cv=10)
-            s2 = cross_val_score(reg, X, y, cv=10)
+            s1_ = cross_val_score(reg, X_source, y_source, cv=10)
+            s2_ = cross_val_score(reg, X, y, cv=10)
 
-            results[rep_id, fun_id, target_id, 0] = np.mean(s2)
-            results[rep_id, fun_id, target_id, 1] = np.mean(s2) - np.mean(s1)
+            results[rep_id, fun_id, target_id, 0] = np.mean(s2_)
+            results[rep_id, fun_id, target_id, 1] = np.mean(s2_) - np.mean(s1_)
             
             results[rep_id, fun_id, target_id, 2] = gen.pop_scores[0,0]
                         
@@ -52,6 +54,6 @@ for rep_id, rs in enumerate(random_states):
             results[rep_id, fun_id, target_id, 4] = c - c_source
 
         print(results[rep_id, fun_id])
-        np.save('res/e_individual_reg_mini.npy', results)
+        np.save('res/e_individual_reg_mini2.npy', results)
     
     exit()

@@ -2,7 +2,9 @@ import numpy as np
 from problexity.regression import c1, c2, c3, c4, l1, l2, s1, s2, s3, l3, s4, t2
 import matplotlib.pyplot as plt
 
-results = np.load('res/e_individual_reg.npy')
+results = np.load('res/e_individual_reg_mini.npy')
+results2 = np.load('res/e_individual_reg_mini2.npy')
+
 print(results.shape) # 10 x 20 x 11 x 5
 
 # clf, 
@@ -51,10 +53,10 @@ plt.savefig('figures/single_criteria_reg.pdf')
 plt.savefig('figures/single_criteria_reg.eps')
 
 ranges = [
-    [0.1, 0.6], #c1 5min
-    [0.05, 0.3], #c2 4min
-    [0.3, 0.9], #c3 50min
-    [0.05, 0.3], #c4 2,5h
+    [0.1, 0.6], #c1 5min || 7min
+    [0.05, 0.3], #c2 4min || 7min
+    [0.3, 0.9], #c3 50min || 47min
+    [0.05, 0.3], #c4 2,5h || 
     [0.05, 0.3], #l1
     [0.1, 0.6], #l2
     [0.1, 0.4], #s1
