@@ -42,7 +42,7 @@ for ax in axx:
     ax.set_xlabel('Measure')
     ax.grid(ls=':')
         
-    mask = [1,1,1,0,0,0,1,0,1,0,0,1]
+    mask = [1,1,1,0,0,0,1,0,1,0,0,0]
 
     for p_id, pc in enumerate(violin_parts['bodies']):
         pc.set_color(['b','r'][mask[p_id]])
@@ -64,16 +64,16 @@ plt.savefig('figures/single_criteria_reg.pdf')
 plt.savefig('figures/single_criteria_reg.eps')
 
 ranges = [
-    [0.6, 0.0], #c1 5min || 7min
-    [0.05, 0.3], #c2 4min || 7min
+    [0.7, 0.1], #c1 5min || 7min
+    [0.3, 0.0], #c2 4min || 7min
     [0.3, 0.9], #c3 50min || 47min
-    [0.05, 0.3], #c4 2,5h || 52min
-    [0.05, 0.3], #l1
-    [0.1, 0.6], #l2
-    [0.1, 0.4], #s1
-    [0.6, 1.0], #s2
-    [0.4, 1.0], #s3
-    [0.9, 1.0], #l3
-    [0.4, 0.6]  #s4
-    [0.4, 0.6]  #t2
+    # [0.05, 0.3], #c4 2,5h || 52min
+    # [0.05, 0.3], #l1
+    # [0.1, 0.6], #l2
+    [0.05, 0.4], #s1
+    # [0.6, 1.0], #s2
+    [0.0, 0.2], #s3
+    # [0.9, 1.0], #l3
+    # [0.4, 0.6]  #s4
+    # [0.4, 0.6]  #t2
 ]
