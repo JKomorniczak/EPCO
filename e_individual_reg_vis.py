@@ -33,27 +33,29 @@ achieved_complexities = mean_res[:,:,3]
 diff_complexities = mean_res[:,:,4]
 
 
-fig, ax = plt.subplots(1,1,figsize=(10,3), sharex=True)
+fig, axx = plt.subplots(2,1,figsize=(10,6), sharex=True)
 
-violin_parts = ax.violinplot(achieved_complexities.T)
-ax.set_xticks(np.arange(len(complexity_funs))+1, complexity_funs, rotation=45)
-ax.set_ylabel('Measure value')
-ax.set_xlabel('Measure')
-ax.grid(ls=':')
+for ax in axx:
+    violin_parts = ax.violinplot(achieved_complexities.T)
+    ax.set_xticks(np.arange(len(complexity_funs))+1, complexity_funs, rotation=45)
+    ax.set_ylabel('Measure value')
+    ax.set_xlabel('Measure')
+    ax.grid(ls=':')
+        
+    mask = [1,1,1,0,0,0,1,0,1,0,0,1]
 
-# ax.set_ylim(0,1)
+    for p_id, pc in enumerate(violin_parts['bodies']):
+        pc.set_color(['b','r'][mask[p_id]])
 
-mask = [1,1,1,0,0,0,1,0,1,0,0,1]
+    violin_parts['cbars'].set_colors(np.array(['b','r'])[mask])
+    violin_parts['cmins'].set_colors(np.array(['b','r'])[mask])
+    violin_parts['cmaxes'].set_colors(np.array(['b','r'])[mask])
 
-for p_id, pc in enumerate(violin_parts['bodies']):
-    pc.set_color(['b','r'][mask[p_id]])
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
 
-violin_parts['cbars'].set_colors(np.array(['b','r'])[mask])
-violin_parts['cmins'].set_colors(np.array(['b','r'])[mask])
-violin_parts['cmaxes'].set_colors(np.array(['b','r'])[mask])
-
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+axx[0].set_ylim(0,1)
+axx[1].set_ylim(2.4,2.8)
 
 plt.tight_layout()
 plt.savefig('foo.png')
