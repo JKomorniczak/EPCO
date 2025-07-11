@@ -1,34 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-    # KNeighborsRegressor(n_neighbors=5),
-    # DecisionTreeRegressor(random_state=2938),
-    # LinearRegression(),
-    # MLPRegressor(random_state=3882),
-    # SVR()
-    
-clfs = [ 'KNR', 'DTR', 'LR', 'MLPR', 'SVMR']
-res_clf = np.load('res/combined_reg_reg.npy')
-res_clf = res_clf[...,0]
-print(res_clf.shape) # (10, 5, 5, 10, 5)
 
-res_clf = res_clf.reshape(-1, 5, 10, 5)
-res_clf = np.mean(res_clf, axis=2)
+regs = [ 'KNR', 'DTR', 'LR', 'MLPR', 'SVMR']
+res_reg = np.load('res/combined_reg_reg.npy')
 
-print(res_clf.shape) # (reps*datasets, targets, clfs)
+measures = ['MAE', 'MSE', 'R2']
+measure_id = 0
+
+res_reg = res_reg[...,measure_id]
+print(res_reg.shape) # (10, 5, 5, 10, 5)
+
+res_reg = res_reg.reshape(-1, 5, 10, 5)
+res_reg = np.mean(res_reg, axis=2)
+
+print(res_reg.shape) # (reps*datasets, targets, clfs)
 
 fig, ax = plt.subplots(1, 5, figsize=(10,4), sharex=True, sharey=True)
 
-for clf_id, clf in enumerate(clfs):
+for reg_id, reg in enumerate(regs):
     
-    rc = res_clf[:,:,clf_id]
+    rc = res_reg[:,:,reg_id]
     mrc = np.mean(rc, axis=0)
     mrc -= 0.5
     mrc /=0.5
     colors = plt.cm.coolwarm(mrc)
 
-    ax[clf_id].set_title('%s' % (clf))
-    bplot = ax[clf_id].boxplot(rc, patch_artist=True)
+    ax[reg_id].set_title('%s' % (reg))
+    bplot = ax[reg_id].boxplot(rc, patch_artist=True)
     
     for patch, color in zip(bplot['boxes'], colors):
         patch.set_facecolor(color)
@@ -37,7 +36,7 @@ for clf_id, clf in enumerate(clfs):
         median.set_color('black')
         median.set_ls(':')
     
-    ax[clf_id].set_xticks(np.arange(5)+1, ['easy', 'med-easy', 'medium', 'med-complex', 'complex'], rotation=90)
+    ax[reg_id].set_xticks(np.arange(5)+1, ['easy', 'med-easy', 'medium', 'med-complex', 'complex'], rotation=90)
 
     
 for aa in ax:
@@ -45,7 +44,7 @@ for aa in ax:
     aa.spines['right'].set_visible(False)
     aa.grid(ls=':')
     
-ax[0].set_ylabel('score')
+ax[0].set_ylabel(measures[measure_id])
 
 
 plt.tight_layout()

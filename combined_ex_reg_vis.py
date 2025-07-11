@@ -18,10 +18,10 @@ np.random.seed(188)
 
 def gen_pareto(measures_all, measures, labels):
     
-    idx = np.random.choice(measures_all.shape[1], replace=False, size=20)
+    idx = np.random.choice(measures_all.shape[1], replace=False, size=40)
     idx = np.sort(idx)
-    # idx[:len(measures)+1] = np.arange(len(measures)+1)
-    # measures_all = measures_all[:70, idx]
+    idx[:len(measures)+1] = np.arange(len(measures)+1)
+    measures_all = measures_all[:70, idx]
     fig, axx = plt.subplots(len(measures),len(measures),figsize=(10,10))
     cols = plt.cm.coolwarm(np.linspace(0,1,measures_all.shape[0]))
     
@@ -79,9 +79,8 @@ def gen_pareto(measures_all, measures, labels):
 
 reps = 10
 random_states = np.random.randint(100,10000,reps)
-complexity_funs = [c1, c2, c4, s1, s2]
+complexity_funs = [c2, c4, s1, s2]
 ranges = [
-    [0.9, 0.1], #c1 30s
     [0.55, 0.0], #c2 30s
     [0.0, 0.6], #c4 4min
     [0.1, 0.3], #s1 2min
@@ -100,16 +99,16 @@ n_datasets = 5
 n_features=20
 
 # GEN
-X_source, y_source = make_friedman1(n_samples=200, random_state=random_states[0])
-gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
+# X_source, y_source = make_friedman1(n_samples=200, random_state=random_states[0])
+# gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
-gen.generate(iters=150, pop_size=100, cross_ratio=0.15, mut_ratio=0.05, decay=0.007)
-np.save('res/gen_example_measures_reg_f.npy', gen.measures_all)
+# gen.generate(iters=150, pop_size=100, cross_ratio=0.15, mut_ratio=0.05, decay=0.007)
+# np.save('res/gen_example_measures_reg_f.npy', gen.measures_all)
 
 
 # # #DRAW
-# measures_all = np.load('res/gen_example_measures_reg_f.npy')
+measures_all = np.load('res/gen_example_measures_reg_f.npy')
 
-# # gen.gen_image()
-# labels=['C1', 'C2', 'S1', 'S3']
-# gen_pareto(measures_all, complexity_funs, labels)
+# gen.gen_image()
+labels=['C2', 'C4', 'S1', 'S2']
+gen_pareto(measures_all, complexity_funs, labels)
