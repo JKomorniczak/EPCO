@@ -53,5 +53,3 @@ plt.savefig('foo.png')
 plt.savefig('figures/reg-scores.png')
 plt.savefig('figures/reg-scores.pdf')
 plt.savefig('figures/reg-scores.eps')
-
-# może make friedmann?

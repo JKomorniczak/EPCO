@@ -6,8 +6,8 @@ os.environ['MKL_NUM_THREADS'] = f"{default_n_threads}"
 os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 
 import numpy as np
-from sklearn.datasets import make_regression
-from problexity.regression import c1, c2, s1, s3
+from sklearn.datasets import make_friedman1
+from problexity.regression import c1, c2, s1, s3, c3, c4, s1, s2
 from Generate import GenComplexity
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
@@ -79,14 +79,13 @@ def gen_pareto(measures_all, measures, labels):
 
 reps = 10
 random_states = np.random.randint(100,10000,reps)
-
-complexity_funs = [c1, c2, s1, s3]
-
+complexity_funs = [c1, c2, c4, s1, s2]
 ranges = [
-    [0.7, 0.1], #c1 5min || 7min
-    [0.3, 0.0], #c2 4min || 7min
-    [0.05, 0.3], #s1
-    [0.0, 0.15], #s3
+    [0.9, 0.1], #c1 30s
+    [0.55, 0.0], #c2 30s
+    [0.0, 0.6], #c4 4min
+    [0.1, 0.3], #s1 2min
+    [0.6, 0.9], #s2 0
 ]
 
 n_targets = 5
@@ -101,16 +100,16 @@ n_datasets = 5
 n_features=20
 
 # GEN
-# X_source, y_source = make_regression(n_samples=200, random_state=random_states[0], n_features=n_features)
-# gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
+X_source, y_source = make_friedman1(n_samples=200, random_state=random_states[0])
+gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
-# gen.generate(iters=150, pop_size=100, cross_ratio=0.15, mut_ratio=0.05, decay=0.007)
-# np.save('res/gen_example_measures_reg.npy', gen.measures_all)
+gen.generate(iters=150, pop_size=100, cross_ratio=0.15, mut_ratio=0.05, decay=0.007)
+np.save('res/gen_example_measures_reg_f.npy', gen.measures_all)
 
 
 # # #DRAW
-measures_all = np.load('res/gen_example_measures_reg.npy')
+# measures_all = np.load('res/gen_example_measures_reg_f.npy')
 
-# gen.gen_image()
-labels=['C1', 'C2', 'S1', 'S3']
-gen_pareto(measures_all, complexity_funs, labels)
+# # gen.gen_image()
+# labels=['C1', 'C2', 'S1', 'S3']
+# gen_pareto(measures_all, complexity_funs, labels)

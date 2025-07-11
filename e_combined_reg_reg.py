@@ -10,7 +10,7 @@ from sklearn.tree import DecisionTreeRegressor
 
 np.random.seed(188)
 
-combined_datasets = np.load('res/combined_datasets_reg.npy')
+combined_datasets = np.load('res/combined_datasets_reg_f.npy')
 
 regs = [
     KNeighborsRegressor(n_neighbors=5),
@@ -45,5 +45,5 @@ for rep in range(10):
                         res_reg[rep, dataset_id, target_com_id, fold, reg_id, m_id] = acc
             
                 print(res_reg[rep, dataset_id, target_com_id, fold])
-                np.save('res/combined_reg_reg.npy', res_reg)
+                np.save('res/combined_reg_reg_f.npy', res_reg)
                     
