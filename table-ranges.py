@@ -16,13 +16,14 @@ clf_ranges = [
     [0.4, 0.6]  #t4
 ]
 
-reg_complexity_funs = ['C1', 'C2', 'S1', 'S3']
+reg_complexity_funs = ['C1', 'C2', 'C3', 'C4', 'S1', 'S2']
 reg_ranges = [
-    [0.7, 0.1], #c1 5min || 7min
-    [0.3, 0.0], #c2 4min || 7min
-    # [0.5, 0.9], #c3 50min || 47min
-    [0.05, 0.3], #s1
-    [0.0, 0.15], #s3
+    [0.9, 0.1], #c1 30s
+    [0.55, 0.0], #c2 30s
+    [0.0, 1.0], #c3 5min
+    [0.0, 0.6], #c4 4min
+    [0.1, 0.3], #s1 2min
+    [0.6, 0.9], #s2 0
 ]
 
 n_targets = 5
