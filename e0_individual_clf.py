@@ -48,4 +48,25 @@ for rep_id, rs in enumerate(random_states):
 
 
         print(results[rep_id, fun_id])
-        np.save('res/e_individual.npy', results)
+        np.save('res/e_individual_clf.npy', results)
+        
+# f1, 0min
+# f1v, 18s
+# f2, 0min
+# f3, 0min
+# f4, 10s
+# l1, 4s
+# l2, 4s
+# l3, 22s
+# n1, 4min
+# n2, 1min
+# n3, 
+# n4, 
+# t1, 
+# lsc, 
+# density, 
+# clsCoef, 
+# hubs, 
+# t2, 
+# t3, 
+# t4

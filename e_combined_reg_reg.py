@@ -10,7 +10,7 @@ from sklearn.tree import DecisionTreeRegressor
 
 np.random.seed(188)
 
-combined_datasets = np.load('res/combined_datasets_reg_f.npy')
+combined_datasets = np.load('vapor/res_prev/combined_datasets_reg_f.npy')
 
 regs = [
     KNeighborsRegressor(n_neighbors=5),
