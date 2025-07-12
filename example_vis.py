@@ -21,7 +21,7 @@ def gen_pareto(measures_all, measures, labels):
     idx = np.random.choice(measures_all.shape[1], replace=False, size=20)
     idx = np.sort(idx)
     idx[:len(measures)+1] = np.arange(len(measures)+1)
-    measures_all = measures_all[:70, idx]
+    measures_all = measures_all[:, idx]
     fig, axx = plt.subplots(len(measures),len(measures),figsize=(10,10))
     cols = plt.cm.coolwarm(np.linspace(0,1,measures_all.shape[0]))
     
@@ -73,9 +73,10 @@ def gen_pareto(measures_all, measures, labels):
                 bbox_transform=fig.transFigure, ncol=5, frameon=False)
 
     plt.tight_layout()
-    plt.savefig('gen_pareto.png')
-    plt.savefig('gen_pareto.pdf')
-    plt.savefig('gen_pareto.eps')
+    plt.savefig('figures/gen_pareto.png')
+    plt.savefig('figures/gen_pareto.pdf')
+    plt.savefig('figures/gen_pareto.eps')
+    plt.savefig('foo.png')
 
 reps = 10
 random_states = np.random.randint(100,10000,reps)

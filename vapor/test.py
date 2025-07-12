@@ -18,9 +18,6 @@ gen.generate(iters=50, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
 
 X, y = gen.return_best()
 
-gen.gen_image()
-gen.gen_pareto()
-
 print(gen.target_complexity)
 
 clf = GaussianNB()
