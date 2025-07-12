@@ -60,13 +60,13 @@ for rep_id, rs in enumerate(random_states):
 # l3, 22s
 # n1, 4min
 # n2, 1min
-# n3, 
-# n4, 
-# t1, 
-# lsc, 
-# density, 
-# clsCoef, 
-# hubs, 
-# t2, 
-# t3, 
-# t4
+# n3, 4s
+# n4, 25s
+# t1, 2min
+# lsc, 1min
+# density, 1min
+# clsCoef, 3min
+# hubs, 1 min
+# t2, 0s
+# t3, 1s
+# t4 1s
