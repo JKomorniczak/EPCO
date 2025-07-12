@@ -89,7 +89,7 @@ class GenComplexity:
                 arg_to_mut = np.random.choice(np.arange(pop_size), n_mutations)
                 
                 for arg in arg_to_mut:
-                    self.population[arg] += np.random.normal(loc=0, scale=mut_std)
+                    self.population[arg] += np.random.normal(loc=0, scale=mut_std, size=self.population[arg].shape)
                     
                     # score mutated
                     pX = self.project(self.population[arg])

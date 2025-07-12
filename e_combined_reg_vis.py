@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 
 regs = [ 'KNR', 'DTR', 'LR', 'MLPR', 'SVMR']
+# res_reg = np.load('res/combined_reg_reg_f.npy')
 res_reg = np.load('res/combined_reg_reg.npy')
 
 measures = ['MAE', 'MSE', 'R2']
@@ -22,8 +23,8 @@ for reg_id, reg in enumerate(regs):
     
     rc = res_reg[:,:,reg_id]
     mrc = np.mean(rc, axis=0)
-    mrc -= 0.5
-    mrc /=0.5
+    mrc -= np.min(mrc)
+    mrc /= np.max(mrc)
     colors = plt.cm.coolwarm(mrc)
 
     ax[reg_id].set_title('%s' % (reg))
