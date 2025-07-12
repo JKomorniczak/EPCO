@@ -1,6 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from tqdm import tqdm
+
+np.random.seed(188)
 
 class GenComplexity:
     def __init__(self, X_source, y_source, target_complexity, measures, vis=False):
