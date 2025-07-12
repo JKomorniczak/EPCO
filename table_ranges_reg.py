@@ -12,13 +12,12 @@ complexity_funs = [c.__name__.upper() for c in complexity_funs]
 targets = ['', 'easy', 'med-easy', 'medium', 'med-complex', 'complex']
 
 ranges = np.array([
-    [0.9, 0.1], #c1 30s
-    [0.55, 0.0], #c2 30s
-    [0.0, 1.0], #c3 5min
-    [0.0, 0.6], #c4 4min
-    [0.1, 0.3], #s1 2min
-    [0.6, 0.9], #s2 0
-    # [0.0, 0.15], #s3 13min
+    [0.9, 0.1], #c1
+    [0.4, 0.0], #c2 
+    [0.0, 0.9], #c3 
+    [0.0, 0.5], #c4
+    [0.1, 0.25], #s1 
+    [0.9, 1.0], #s2 
 ])
 print(ranges.shape) # 11 x 2
 

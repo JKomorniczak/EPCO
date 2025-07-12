@@ -6,7 +6,7 @@ os.environ['MKL_NUM_THREADS'] = f"{default_n_threads}"
 os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 
 import numpy as np
-from sklearn.datasets import make_friedman1
+from sklearn.datasets import make_regression
 from problexity.regression import c1, c2, s1, s3, c3, c4, s1, s2
 from Generate import GenComplexity
 import matplotlib.pyplot as plt
@@ -46,7 +46,7 @@ def gen_pareto(measures_all, measures, labels):
                     ax.scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.5, s=10, lw=0)
                 ax.scatter(measures_all[-1,:len(measures),c1],measures_all[-1,:len(measures),c2], c='b', marker='x', s=30)
                 ax.scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
-                # ax.scatter(0,0,c='k',marker='x')
+                ax.scatter(0,0,c='k',marker='*')
                 if c2==len(measures)-1:
                     ax.set_xlabel(labels[c1])
                 if c1==0:
@@ -73,18 +73,20 @@ def gen_pareto(measures_all, measures, labels):
                 bbox_transform=fig.transFigure, ncol=5, frameon=False)
 
     plt.tight_layout()
-    plt.savefig('gen_pareto.png')
-    plt.savefig('gen_pareto.pdf')
-    plt.savefig('gen_pareto.eps')
+    plt.savefig('figures/gen_pareto_r.png')
+    plt.savefig('figures/gen_pareto_r.pdf')
+    plt.savefig('figures/gen_pareto_r.eps')
+    plt.savefig('foo.png')
 
-reps = 10
-random_states = np.random.randint(100,10000,reps)
-complexity_funs = [c2, c4, s1, s2]
+random_states = np.random.randint(100,10000,10)
+complexity_funs = [c1, c2, c4, s1, s2]
 ranges = [
-    [0.55, 0.0], #c2 30s
-    [0.0, 0.6], #c4 4min
-    [0.1, 0.3], #s1 2min
-    [0.6, 0.9], #s2 0
+    [0.9, 0.1], #c1
+    [0.4, 0.0], #c2 
+    # [0.0, 0.9], #c3 
+    [0.0, 0.5], #c4
+    [0.1, 0.25], #s1 
+    [0.9, 1.0], #s2 
 ]
 
 n_targets = 5
@@ -99,16 +101,16 @@ n_datasets = 5
 n_features=20
 
 # GEN
-# X_source, y_source = make_friedman1(n_samples=200, random_state=random_states[0])
+# X_source, y_source = make_regression(n_samples=200, random_state=random_states[0], n_features=20, noise=1.0)
 # gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
-# gen.generate(iters=150, pop_size=100, cross_ratio=0.15, mut_ratio=0.05, decay=0.007)
-# np.save('res/gen_example_measures_reg_f.npy', gen.measures_all)
+# gen.generate(iters=100, pop_size=100, cross_ratio=0.25, mut_ratio=0.1, decay=0.01)
+# np.save('res/gen_example_measures_reg.npy', gen.measures_all)
 
 
 # # #DRAW
-measures_all = np.load('res/gen_example_measures_reg_f.npy')
+measures_all = np.load('res/gen_example_measures_reg.npy')
 
 # gen.gen_image()
-labels=['C2', 'C4', 'S1', 'S2']
+labels=['C1', 'C2', 'C4', 'S1', 'S2']
 gen_pareto(measures_all, complexity_funs, labels)
