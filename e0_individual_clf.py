@@ -18,8 +18,6 @@ random_states = np.random.randint(100,10000,reps)
 complexity_funs = [f1, f1v, f2, f3, f4, l1, l2, l3, n1, n2, n3, n4, t1, lsc, density, clsCoef, hubs, t2, t3, t4]
 targets = np.linspace(0, 1, 10)
 
-# prev_res = np.load('res/e_individual.npy')
-
 results = np.zeros((reps, len(complexity_funs), len(targets), 3)) # score, 
                                                                   # complexity,
                                                                   # complexity diff from source
@@ -29,10 +27,6 @@ for rep_id, rs in enumerate(random_states):
     for fun_id, fun in enumerate(complexity_funs):
         print('Measure: %s' % fun.__name__)
         c_source = fun(X_source, y_source)
-        
-        # if np.sum(prev_res[rep_id, fun_id]==0)<55:
-        #     results[rep_id, fun_id] = prev_res[rep_id, fun_id]
-        #     continue
 
         for target_id, target in enumerate(targets):
             gen = GenComplexity(X_source, y_source, [target], [fun])

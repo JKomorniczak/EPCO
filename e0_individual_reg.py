@@ -47,9 +47,9 @@ for rep_id, rs in enumerate(random_states):
 # c2, 1min
 # c3, 12min
 # c4, 15min
-# l1, 
-# l2, 
-# s1, 
+# l1, 2s
+# l2, 2s
+# s1, 2min
 # s2, 
 # s3, 
 # l3, 

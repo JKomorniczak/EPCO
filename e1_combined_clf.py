@@ -40,7 +40,7 @@ n_datasets = len(complexity_funs)+1
 n_samples=350
 n_features=20
 
-combined_datasets = np.zeros((reps, n_targets, n_datasets, n_samples, n_samples, n_features+1))
+combined_datasets = np.zeros((reps, n_targets, n_datasets, n_samples, n_features+1))
 combined_results = np.zeros((reps, n_targets, n_datasets, 2, len(complexity_funs)))
 
 for rep_id, rs in enumerate(random_states):
@@ -49,7 +49,7 @@ for rep_id, rs in enumerate(random_states):
     for target_id in range(n_targets):
         gen = GenComplexity(X_source, y_source, targets[target_id], complexity_funs)
         
-        gen.generate(iters=200, pop_size=200, 
+        gen.generate(iters=100, pop_size=100, 
                      cross_ratio=0.25, mut_ratio=0.1, 
                      decay=0.007)
         
