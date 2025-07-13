@@ -2,15 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-regs = [ 'KNR', 'DTR', 'LR', 'MLPR', 'SVMR']
-res_reg = np.load('res/combined_reg_reg_f.npy')
+regs = [ 'KNR', 'DTR', 'BRR', 'MLPR', 'SVMR']
+res_reg = np.load('res/e2_combined_reg.npy')
 
 measures = ['MAE', 'MSE', 'R2']
 measure_id = 0
 
 res_reg = res_reg[...,measure_id]
 print(res_reg.shape) # (10, 5, 5, 10, 5)
-res_reg = res_reg[:3]
 
 res_reg = res_reg.reshape(-1, 5, 10, 5)
 res_reg = np.mean(res_reg, axis=2)

@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import clone
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import BayesianRidge
 from sklearn.model_selection import RepeatedKFold
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.neighbors import KNeighborsRegressor
@@ -15,7 +15,7 @@ combined_datasets = np.load('res/combined_datasets_reg.npy')
 regs = [
     KNeighborsRegressor(n_neighbors=5),
     DecisionTreeRegressor(random_state=2938),
-    LinearRegression(),
+    BayesianRidge(),
     MLPRegressor(random_state=3882),
     SVR()
 ]
