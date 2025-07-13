@@ -17,8 +17,10 @@ for clf_id, clf in enumerate(clfs):
     
     rc = res_clf[:,:,clf_id]
     mrc = np.mean(rc, axis=0)
-    mrc -= 0.5
-    mrc /=0.5
+    # mrc -= 0.5
+    # mrc /=0.5
+    mrc -= np.min(mrc)
+    mrc /= np.max(mrc)
     colors = plt.cm.coolwarm(mrc)
 
     ax[clf_id].set_title('%s' % (clf))
