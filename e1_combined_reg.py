@@ -14,11 +14,11 @@ np.random.seed(188)
 reps = 10
 random_states = np.random.randint(100,10000,reps)
 
-complexity_funs = [c1, c2, c3, s1, s2]
+complexity_funs = [c1, c2, s1, s2]
 ranges = [
     [0.9, 0.1], #c1
     [0.4, 0.0], #c2 
-    [0.0, 0.9], #c3 
+    # [0.0, 0.9], #c3 
     # [0.0, 0.5], #c4
     [0.1, 0.25], #s1 
     [0.9, 1.0], #s2 
