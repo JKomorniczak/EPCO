@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 clfs = [ 'KNN', 'DT', 'GNB', 'MLP', 'SVM']
-res_clf = np.load('res/combined_clf.npy')
+res_clf = np.load('res/e2_combined_clf.npy')
 
 print(res_clf.shape) # (10, 12, 5, 10, 5)
 
