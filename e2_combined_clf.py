@@ -30,7 +30,7 @@ res_clf = np.zeros((10, 11, 5, 10, len(clfs)))
 
 for rep in range(10): 
     print(rep, np.sum(combined_datasets[rep]))
-    continue
+    # continue
     
     for dataset_id in range(n_datasets):
         

@@ -27,7 +27,7 @@ res_reg = np.zeros((10, 5, 5, 10, len(regs), 3))
 
 for rep in range(10):
     print(rep, np.sum(combined_datasets[rep]))
-    continue
+    # continue
     for dataset_id in range(5):
         
         for target_com_id in range(5):
@@ -47,5 +47,5 @@ for rep in range(10):
                         res_reg[rep, dataset_id, target_com_id, fold, reg_id, m_id] = acc
             
                 print(res_reg[rep, dataset_id, target_com_id, fold])
-                np.save('res/combined_reg_reg_f.npy', res_reg)
+                np.save('res/e2_combined_reg.npy', res_reg)
                     
