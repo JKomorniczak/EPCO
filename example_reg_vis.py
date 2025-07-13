@@ -112,5 +112,5 @@ n_features=20
 measures_all = np.load('res/gen_example_measures_reg.npy')
 
 # gen.gen_image()
-labels=['C1', 'C2', 'C4', 'S1', 'S2']
+labels=['C1', 'C2', 'S1', 'S2']
 gen_pareto(measures_all, complexity_funs, labels)
