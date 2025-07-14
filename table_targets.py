@@ -32,7 +32,7 @@ for fun_id in range(len(clf_complexity_funs)):
 
 targets_clf = np.array(targets).swapaxes(0,1)
 # targets_clf.append([clf_complexity_funs])
-
+print(clf_complexity_funs)
 print(tabulate(targets_clf, tablefmt='latex'))
 
 #reg
