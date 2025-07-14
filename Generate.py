@@ -50,7 +50,7 @@ class GenComplexity:
                 r = np.argsort(np.sum(self.pop_scores, axis=1))
                 indexes2 = indexes+len(self.measures)
                 indexes2 = indexes2[indexes2<pop_size]
-                order[indexes2] = r[:len(indexes2)]            
+                order[indexes2] = r[:len(indexes2)]         
 
             self.population = self.population[order]
             self.pop_scores = self.pop_scores[order]

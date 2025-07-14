@@ -27,10 +27,14 @@ def gen_pareto(measures_all, measures, labels):
     
     c1 = 0
     c2 = 1
+    # print(measures_all[-1,:len(measures),c2])
+    # print(measures_all[-1,len(measures),c2])
+    # print(measures_all[-1,:10,c2])
+    # exit()
     for iter in range(measures_all.shape[0]):
         ax[0].scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.5, s=10, lw=0)
     ax[0].scatter(measures_all[-1,:len(measures),c1],measures_all[-1,:len(measures),c2], c='b', marker='x', s=30)
-    ax[0].scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
+    # ax[0].scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
     ax[0].scatter(0,0,c='k',marker='*')
     ax[0].set_xlabel(labels[c1])
     ax[0].set_ylabel(labels[c2])
@@ -40,7 +44,7 @@ def gen_pareto(measures_all, measures, labels):
     for iter in range(measures_all.shape[0]):
         ax[1].scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.5, s=10, lw=0)
     ax[1].scatter(measures_all[-1,:len(measures),c1],measures_all[-1,:len(measures),c2], c='b', marker='x', s=30)
-    ax[1].scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
+    # ax[1].scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
     ax[1].scatter(0,0,c='k',marker='*')
     ax[1].set_xlabel(labels[c1])
     ax[1].set_ylabel(labels[c2])
@@ -50,7 +54,7 @@ def gen_pareto(measures_all, measures, labels):
     for iter in range(measures_all.shape[0]):
         ax[2].scatter(measures_all[iter,:,c1], measures_all[iter,:,c2], color=cols[iter], alpha=0.5, s=10, lw=0)
     ax[2].scatter(measures_all[-1,:len(measures),c1],measures_all[-1,:len(measures),c2], c='b', marker='x', s=30)
-    ax[2].scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
+    # ax[2].scatter(measures_all[-1,len(measures),c1],measures_all[-1,len(measures),c2], c='k', marker='x', s=30)
     ax[2].scatter(0,0,c='k',marker='*')
     ax[2].set_xlabel(labels[c1])
     ax[2].set_ylabel(labels[c2])
@@ -95,7 +99,7 @@ def gen_pareto(measures_all, measures, labels):
                    markeredgecolor='b', marker='x', markerfacecolor='b',
                    linestyle='')
     
-    plt.subplots_adjust(top=0.9, bottom=0.35)
+    plt.subplots_adjust(top=0.9, bottom=0.35, wspace = 0.35)
 
     plt.legend(bbox_to_anchor=(0.89, 0.001), loc="lower right", handles=[point1, point2, line1f, line2f, line1n, line2n, line1c, line2c],
                 bbox_transform=fig.transFigure, ncol=4, frameon=False)
