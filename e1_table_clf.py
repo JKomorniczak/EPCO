@@ -21,7 +21,7 @@ ranges = np.array([
     [0.5, 0.65]  #t4
 ])
 
-targets = ['', 'easy', 'med-easy', 'medium', 'med-complex', 'complex']
+targets = ['', 'easy', 'm/easy', 'medium', 'm/complex', 'complex']
 
 print(ranges.shape) # 10 x 2
 print(combined_results.shape)

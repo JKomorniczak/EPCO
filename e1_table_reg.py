@@ -13,7 +13,7 @@ ranges = np.array([
     [0.9, 1.0], #s2 
 ])
 
-targets = ['', 'easy', 'med-easy', 'medium', 'med-complex', 'complex']
+targets = ['', 'easy', 'm/easy', 'medium', 'm/complex', 'complex']
 
 
 print(ranges.shape) # 11 x 2

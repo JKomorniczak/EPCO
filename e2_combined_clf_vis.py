@@ -33,7 +33,7 @@ for clf_id, clf in enumerate(clfs):
         median.set_color('black')
         median.set_ls(':')
     
-    ax[clf_id].set_xticks(np.arange(5)+1, ['easy', 'med-easy', 'medium', 'med-complex', 'complex'], rotation=90)
+    ax[clf_id].set_xticks(np.arange(5)+1, ['easy', 'm/easy', 'medium', 'm/complex', 'complex'], rotation=90)
 
     
 for aa in ax:

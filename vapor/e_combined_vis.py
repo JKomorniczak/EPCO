@@ -48,7 +48,7 @@ for t_id in range(n_targets):
     com_pct /= ranges[:,1]
      
     ax[0, t_id].imshow(combined_results_mean[t_id,:,0], cmap='coolwarm', aspect='auto', vmin=0, vmax=0.6)
-    ax[0, t_id].set_title(['easy', 'med-easy', 'medium', 'med-complex', 'complex'][t_id])
+    ax[0, t_id].set_title(['easy', 'm/easy', 'medium', 'm/complex', 'complex'][t_id])
 
     im2= ax[1, t_id].imshow(com_pct, cmap='coolwarm', aspect='auto', vmin=0, vmax=0.6)
     
