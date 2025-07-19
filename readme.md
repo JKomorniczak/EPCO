@@ -26,8 +26,8 @@ Result of processing example:
 |                  | T1          | *Fraction of hyperspheres covering data*               |    0.60 |    1.00 |
 |                  | ClsC        | *Clustering Coefficient*                               |    0.45 |    1.00 |
 |                  | T4          | *Ratio of the PCA dimension to the original dimension* |    0.50 |    0.65 |
-| *Regression*     | C1          | *Maximum feature correlation to the output*            |    0.10 |    0.90 |
-|                  | C2          | *Average feature correlation to the output*            |    0.00 |    0.40 |
+| *Regression*     | C1          | *Maximum feature correlation to the output*            |    0.90 |    0.10 |
+|                  | C2          | *Average feature correlation to the output*            |    0.40 |    0.00 |
 |                  | S1          | *Output distribution*                                  |    0.10 |    0.25 |
 |                  | S2          | *Input distribution*                                   |    0.90 |    1.00 |
 
