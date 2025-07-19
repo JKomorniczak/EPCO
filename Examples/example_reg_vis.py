@@ -8,7 +8,7 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 import numpy as np
 from sklearn.datasets import make_regression
 from problexity.regression import c1, c2, s1, s3, c3, c4, s1, s2
-from Generate import GenComplexity
+from EPCO import GenComplexity
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
 from matplotlib.lines import Line2D

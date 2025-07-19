@@ -3,7 +3,7 @@ from tqdm import tqdm
 
 np.random.seed(188)
 
-class GenComplexity:
+class EPCO:
     def __init__(self, X_source, y_source, target_complexity, measures, vis=False):
         self.X_source = X_source
         self.y_source = y_source
@@ -61,9 +61,9 @@ class GenComplexity:
                 self.scores_all.append(np.sum(self.pop_scores, axis=1))
                 self.measures_all.append(self.pop_scores)
                 
-            if i!= self.iters-1: # w ostatnim kroku bez modyfikacji
+            if i!= self.iters-1: # last iteration not modifying the population
                         
-                ### krzyżowanie
+                ### crossover
                 n_crosses = np.max([int(cross_ratio*pop_size), 1])                
                 new = []
                 for n_cross_id in range(n_crosses):                   
@@ -85,7 +85,7 @@ class GenComplexity:
                 self.pop_scores[-n_crosses:] = np.array(score_new).swapaxes(0,1)
                 cross_ratio = cross_ratio*(1-decay)
                     
-                ### mutacja
+                ### mutation
                 n_mutations = int(mut_ratio*pop_size)
                 arg_to_mut = np.random.choice(np.arange(pop_size), n_mutations)
                 

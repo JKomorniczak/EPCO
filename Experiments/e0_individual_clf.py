@@ -1,5 +1,5 @@
 import os
-from Generate import GenComplexity
+from EPCO import GenComplexity
 
 default_n_threads = 1
 os.environ['OPENBLAS_NUM_THREADS'] = f"{default_n_threads}"

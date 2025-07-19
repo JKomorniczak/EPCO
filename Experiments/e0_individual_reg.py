@@ -8,7 +8,7 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 import numpy as np
 from sklearn.datasets import make_regression
 from problexity.regression import c1, c2, c3, c4, l1, l2, s1, s2, s3, l3, s4, t2
-from Generate import GenComplexity
+from EPCO import GenComplexity
 
 np.random.seed(188)
 
