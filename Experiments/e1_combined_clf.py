@@ -8,7 +8,7 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 import numpy as np
 from sklearn.datasets import make_classification
 from problexity.classification import f1, f3, f4, l2, n1, n3, n4, t1, clsCoef, t4
-from EPCO import GenComplexity
+from EPCO import EPCO
 np.random.seed(188)
 
 reps = 10
@@ -47,7 +47,7 @@ for rep_id, rs in enumerate(random_states):
     X_source, y_source = make_classification(n_samples=n_samples, random_state=rs, n_features=n_features)
 
     for target_id in range(n_targets):
-        gen = GenComplexity(X_source, y_source, targets[target_id], complexity_funs)
+        gen = EPCO(X_source, y_source, targets[target_id], complexity_funs)
         
         gen.generate(iters=100, pop_size=100, 
                      cross_ratio=0.25, mut_ratio=0.1, 

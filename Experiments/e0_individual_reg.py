@@ -8,7 +8,7 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 import numpy as np
 from sklearn.datasets import make_regression
 from problexity.regression import c1, c2, c3, c4, l1, l2, s1, s2, s3, l3, s4, t2
-from EPCO import GenComplexity
+from EPCO import EPCO
 
 np.random.seed(188)
 
@@ -29,7 +29,7 @@ for rep_id, rs in enumerate(random_states):
         c_source = fun(X_source, y_source)
 
         for target_id, target in enumerate(targets):
-            gen = GenComplexity(X_source, y_source, [target], [fun])
+            gen = EPCO(X_source, y_source, [target], [fun])
             gen.generate(iters=50, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
 
             X, y = gen.return_best(0)

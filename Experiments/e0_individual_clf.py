@@ -1,5 +1,5 @@
 import os
-from EPCO import GenComplexity
+from EPCO import EPCO
 
 default_n_threads = 1
 os.environ['OPENBLAS_NUM_THREADS'] = f"{default_n_threads}"
@@ -29,7 +29,7 @@ for rep_id, rs in enumerate(random_states):
         c_source = fun(X_source, y_source)
 
         for target_id, target in enumerate(targets):
-            gen = GenComplexity(X_source, y_source, [target], [fun])
+            gen = EPCO(X_source, y_source, [target], [fun])
             gen.generate(iters=50, pop_size=70, cross_ratio=0.25, mut_ratio=0.1)
 
             X, y = gen.return_best(0)

@@ -8,7 +8,7 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 import numpy as np
 from sklearn.datasets import make_regression
 from problexity.regression import c1, c2, s1, s3, c3, c4, s1, s2
-from EPCO import GenComplexity
+from EPCO import EPCO
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
 from matplotlib.lines import Line2D
@@ -102,7 +102,7 @@ n_features=20
 
 # GEN
 # X_source, y_source = make_regression(n_samples=200, random_state=random_states[0], n_features=20, noise=1.0)
-# gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
+# gen = EPCO(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
 # gen.generate(iters=100, pop_size=100, cross_ratio=0.25, mut_ratio=0.1, decay=0.01)
 # np.save('res/gen_example_measures_reg.npy', gen.measures_all)

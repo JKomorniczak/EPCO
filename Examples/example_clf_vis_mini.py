@@ -8,7 +8,7 @@ os.environ['OMP_NUM_THREADS'] = f"{default_n_threads}"
 import numpy as np
 from sklearn.datasets import make_classification
 from problexity.classification import f1, f3, l2, n1, n3, n4, t1, clsCoef, hubs, t4, f4
-from EPCO import GenComplexity
+from EPCO import EPCO
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
 from matplotlib.lines import Line2D
@@ -137,7 +137,7 @@ targets = np.array(targets).swapaxes(0,1)
 
 # GEN
 # X_source, y_source = make_classification(n_samples=200, random_state=random_states[0])
-# gen = GenComplexity(X_source, y_source, targets[-1], complexity_funs, vis=True)
+# gen = EPCO(X_source, y_source, targets[-1], complexity_funs, vis=True)
 
 # gen.generate(iters=200, pop_size=200, cross_ratio=0.3, mut_ratio=0.1, decay=0.007)
 # np.save('res/gen_example_measures_mini.npy', gen.measures_all)
