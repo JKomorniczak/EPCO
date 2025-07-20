@@ -45,3 +45,6 @@ Result of preliminary experiment:
     - `e0` -- preliminary single-criteria experiment for measure and range selection.
     - `e1` -- many-criteria optimization with 10 classification and 4 recgression complexity measures.
     - `e2` -- experiments evaluating the recognition quality.
+- `EPCO.py` -- implementation of EPCO
+- `ranges.py` -- specification of used measures and their ranges. The first element indicates end of a range for easy problems, the second value indicates end of a range for complex ptoblems.
+- `MPE.ipynb` -- minimal processing example with EPCO and classification problem transformation with 3 measures.
