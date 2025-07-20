@@ -1,8 +1,6 @@
 import numpy as np
 from tqdm import tqdm
 
-np.random.seed(188)
-
 class EPCO:
     def __init__(self, X_source, y_source, target_complexity, measures, vis=False):
         self.X_source = X_source
@@ -14,15 +12,17 @@ class EPCO:
         if len(target_complexity) != len(measures):
             raise AttributeError('Wrong length of target complexity in relation to measures')
 
-    def generate(self, pop_size = 100, iters=100, cross_ratio=0.3, mut_ratio=0.1, mut_std = 0.1, decay = 0.01):
+    def generate(self, pop_size = 100, iters=100, cross_ratio=0.25, mut_ratio=0.1, mut_std = 0.1, decay = 0.007):
         self.iters = iters
-        self.order_all = []
-        self.scores_all = []
-        self.measures_all = []
                 
         self.population = np.random.normal(loc=0, scale=3, size=(pop_size, self.X_source.shape[1], self.X_source.shape[1]))
         self.pop_scores = np.full((pop_size, len(self.measures)), np.nan)
         
+        if self.vis:
+            self.order_all = []
+            self.scores_all = []
+            self.measures_all = []
+            
         ### optimize
         for i in tqdm(range(self.iters)):
             
@@ -39,7 +39,7 @@ class EPCO:
             if len(self.measures)==1:
                 n = len(self.measures)
             else:
-                n = len(self.measures)+1 # additional for mean criteria
+                n = len(self.measures)+1 # additional for sum criteria
             indexes = np.arange(0, pop_size-n, n) 
             
             for m in range(len(self.measures)):
@@ -55,7 +55,7 @@ class EPCO:
             self.population = self.population[order]
             self.pop_scores = self.pop_scores[order]
             
-            ## for vis
+            ## save for visualizaions -- optional
             if self.vis:
                 self.order_all.append(order)
                 self.scores_all.append(np.sum(self.pop_scores, axis=1))
