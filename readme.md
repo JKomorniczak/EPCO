@@ -3,6 +3,19 @@
 ##### Abstract:
 The research community continues to seek increasingly more advanced synthetic data generators to reliably evaluate the strengths and limitations of machine learning methods. This work aims to increase the availability of datasets encompassing a diverse range of problem complexities by proposing a genetic algorithm that optimizes a set of problem complexity measures for classification and regression tasks towards specific targets. For classification, a set of 10 complexity measures was used, while for regression tasks, 4 measures demonstrating promising optimization capabilities were selected. Experiments confirmed that the proposed genetic algorithm can generate datasets with varying levels of difficulty by transforming synthetically created datasets to achieve target complexity values through linear feature projections. Evaluations involving state-of-the-art classifiers and regressors revealed a correlation between the complexity of the generated data and the recognition quality.
 
+##### Preprint:
+```
+@misc{komorniczak2025transformingdatasetsrequestedcomplexity,
+      title={Transforming Datasets to Requested Complexity with Projection-based Many-Objective Genetic Algorithm}, 
+      author={Joanna Komorniczak},
+      year={2025},
+      eprint={2507.15132},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2507.15132}, 
+}
+```
+
 ### Evolutionary Projection-based Complexity Optimization (EPCO)
 
 - The EPCO is implemented in `EPCO.py`.
